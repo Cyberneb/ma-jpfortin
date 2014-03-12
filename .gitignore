@@ -1,0 +1,50 @@
+# Installation-specific Magento files
+app/etc/local.xml
+media/*
+var/*
+awstats/*
+magmi/conf/*
+
+#modam
+.modman
+
+# Developer toolbar #
+######################
+app/code/community/HM/
+app/etc/modules/HM_DeveloperToolbar.xml
+*developertoolbar*
+app/MW_Developertoolbar.xml
+app/code/local/MW/
+app/etc/modules/MW_Developertoolbar.xml
+js/mw_js/
+
+
+# IDE files #
+#############
+nbproject/*
+
+.buildpath
+.settings/*
+.project
+
+.idea
+.idea/*
+t3st?
+
+_temp
+_temp/*
+
+atlassian-ide-plugin.xml
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+*.swp
