@@ -1,0 +1,68 @@
+.availability
+{
+	margin: 0;
+	span
+	{
+		font-weight: bold;
+	}
+	&.in-stock
+	{
+		span
+		{
+		}
+	}
+	&.out-of-stock
+	{
+		span
+		{
+			color: #d83820;
+		}
+	}
+}
+
+.availability-only
+{
+	margin: 0 0 7px;
+	a
+	{
+		padding-right: 15px;
+		background: url(../images/i_availability_only_arrow.gif) 100% 0 no-repeat;
+		cursor: pointer;
+	}
+	strong
+	{
+	}
+	.expanded
+	{
+		background-position: 100% -15px;
+	}
+}
+
+.availability-only-details
+{
+	margin: 0 0 7px;
+	th
+	{
+		padding: 0 8px;
+		background: #f2f2f2;
+		font-size: 10px;
+	}
+	td
+	{
+		padding: 2px 8px 1px;
+		border-bottom: 1px solid #ddd;
+		font-size: 11px;
+	}
+	tr
+	{
+		&.odd
+		{
+			 td
+			 {
+			 	&.last
+			 	{
+			 	}
+			 }
+		}
+	}
+}

@@ -1,0 +1,86 @@
+.logo
+{
+	float: left;
+}
+
+header
+{
+	padding: 10px;
+	border: 1px solid #ddd;
+	h1
+	{
+		&.logo
+		{
+			margin: 0;
+			padding: 0;
+		}
+	}
+	.logo
+	{
+		float: left;
+		text-decoration: none !important;
+		strong
+		{
+			position: absolute;
+			top: -999em;
+			left: -999em;
+			width: 0;
+			height: 0;
+			overflow: hidden;
+			text-indent: -999em;
+			line-height: 0;
+			font-size: 0;
+		}
+	}
+	.welcome-msg
+	{
+		text-align: right;
+		font-weight: bold;
+		a
+		{
+		}
+	}
+	.links
+	{
+		float: right;
+	}
+	.form-language
+	{
+		clear: both;
+		text-align: right;
+	}
+	.top-container
+	{
+		clear: both;
+		text-align: right;
+	}
+}
+
+.form-search
+{
+	text-align: right;
+	.search-autocomplete
+	{
+		z-index: 999;
+		ul
+		{
+			border: 1px solid #ddd;
+			background-color: #fff;
+		}
+		li
+		{
+			&:extend(.clearer all);
+			padding: 3px;
+			border-bottom: 1px solid #ddd;
+			cursor: pointer;
+			&.selected
+			{
+			}
+			.amount
+			{
+				float: right;
+				font-weight: bold;
+			}
+		}
+	}
+}

@@ -1,0 +1,43 @@
+.block-poll
+{
+	label
+	{
+	}
+	input
+	{
+		&.radio
+		{
+			float: left;
+			margin: 1px -18px 0 0;
+		}
+	}
+	.label
+	{
+		display: block;
+		margin-left: 18px;
+	}
+	li
+	{
+		&:extend(.clearer all);
+		padding: 3px 9px;
+	}
+	.actions
+	{
+		margin: 5px 0 0;
+	}
+	.answer
+	{
+		font-weight: bold;
+	}
+	.votes
+	{
+		float: right;
+		margin-left: 10px;
+	}
+}
+
+// SEE ALSO
+// ie.less :
+//     .block-poll li,
+//     .block-poll li,
+//     .block-poll .label

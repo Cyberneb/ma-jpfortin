@@ -1,0 +1,131 @@
+.page
+{
+	position: relative;
+	padding: 10px 0;
+}
+
+header,
+nav,
+main,
+footer
+{
+	&:extend(.clearer all);
+	max-width: 1000px;
+	margin: 0 auto 10px;
+}
+
+.page-print
+{
+	padding: 20px;
+}
+
+.popup
+{
+	position: relative;
+	width: 90%;
+	max-width: 900px;
+	margin: 10px auto;
+	padding: 2em;
+	background: #fff;
+}
+
+.col-main
+{
+	&:extend(.clearer all);
+	padding: 5px;
+	border: 1px solid #ddd;
+}
+
+.col-left,
+.col-right
+{
+	width: 24.2%;
+	padding: 5px 5px 0;
+	border: 1px solid #ddd;
+}
+
+.col-left,
+.col2-right-layout .col-main,
+.col3-layout .col-wrapper
+{
+	float: left;	
+}
+.col-right,
+.col2-left-layout .col-main,
+.col3-layout .col-main
+{
+	float: right;
+}
+
+.col2-left-layout .col-main,
+.col2-right-layout .col-main,
+.col3-layout .col-wrapper
+{
+	width: 74.8%;
+}
+
+.col3-layout
+{
+	.col-main
+	{
+		width: 66.31%;
+	}
+	.col-left
+	{
+		width: 32.35%;
+	}
+}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4
+{
+	float: left;
+	margin-left: 2%;
+	&:first-child
+	{
+		margin-left: 0;
+	}
+}
+	
+.col2-set
+{
+	&:extend(.clearer all);
+	.col-1,
+	.col-2
+	{
+		width: 49%;
+	}
+	.col-narrow
+	{
+		width: 33%;
+	}
+	.col-wide
+	{
+		width: 65%;
+	}
+}
+
+.col3-set
+{
+	&:extend(.clearer all);
+	.col-1,
+	.col-2,
+	.col-3
+	{
+		width: 32%;
+	}
+}
+
+.col4-set
+{
+	&:extend(.clearer all);
+	.col-1,
+	.col-2,
+	.col-3,
+	.col-4
+	{
+		width: 23.5%;
+	}
+}

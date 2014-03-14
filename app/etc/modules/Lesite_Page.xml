@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Lesite
+ * @package     Lesite_Page
+ */
+-->
+<config>
+    <modules>
+        <Lesite_Page>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Page />
+            </depends>
+        </Lesite_Page>
+    </modules>
+</config>

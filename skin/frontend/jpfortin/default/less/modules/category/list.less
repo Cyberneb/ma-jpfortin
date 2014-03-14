@@ -1,0 +1,67 @@
+.products-list
+{
+	.item
+	{
+		&:extend(.clearer all);
+		padding: 12px 10px;
+		border-bottom: 1px solid #ddd;
+		&.last
+		{
+			border-bottom: 0;
+		}
+	}
+	.product-image
+	{
+		float: left;
+		width: 29.1%;
+		margin: 0 0 10px;
+		text-align: center;
+	}
+	.product-shop
+	{
+		margin-left: 32.33%;
+	}
+	.product-name
+	{
+		margin: 0 0 5px;
+		font-weight: bold;
+		font-size: 13px;
+		a
+		{
+		}
+	}
+	.price-box
+	{
+		float: left;
+		margin: 3px 13px 5px 0;
+	}
+	.availability
+	{
+		float: left;
+		margin: 3px 0 0;
+	}
+	.desc
+	{
+		clear: both;
+		margin: 0 0 15px;
+		padding: 6px 0 0;
+		line-height: 1.35;
+		.link-learn
+		{
+			font-size: 11px;
+		}
+	}
+	.add-to-links
+	{
+		clear: both;
+		li
+		{
+			display: inline;
+		}
+		.separator
+		{
+			display: inline;
+			margin: 0 2px;
+		}
+	}
+}

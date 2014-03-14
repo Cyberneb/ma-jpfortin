@@ -1,0 +1,47 @@
+.add-to-links
+{
+	.separator
+	{
+		display: none;
+	}
+}
+
+.add-to-cart
+{
+	&:extend(.clearer all);
+	label
+	{
+		float: left;
+		margin-right: 5px;
+	}
+	.qty
+	{
+		float: left;
+	}
+	button
+	{
+		&.button
+		{
+			float: left;
+			margin-left: 5px;
+		}
+	}
+}
+
+.add-to-box
+{
+	&:extend(.clearer all);
+	.add-to-cart
+	{
+		float: left;
+	}
+	.or
+	{
+		float: left;
+		margin: 0 10px;
+	}
+	.add-to-links
+	{
+		float: left;
+	}
+}

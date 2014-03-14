@@ -1,0 +1,80 @@
+.main-menu
+{
+	&:extend(.clearer all);
+	margin: 10px 0;
+	padding: 5px 0;
+	border: 1px solid #ddd;
+	font-size: 13px;
+	li
+	{
+		position: relative;
+		float: left;
+		text-align: left;
+		&.parent
+		{
+		}
+		&:hover
+		{
+			z-index: 998;
+			> ul
+			{
+				left: 0;
+				z-index: 999;
+			}
+		}
+		&:hover,
+		&.active
+		{
+			> a
+			{
+				color: #000;
+			}
+		}
+	}
+	a
+	{
+		display: block;
+		padding: 5px 10px;
+		text-decoration: none;
+		font-weight: bold;
+		color: #888;
+		&:hover
+		{
+			text-decoration: none;
+		}
+	}
+	ul
+	{
+		position: absolute;
+		top: 25px;
+		left: -10000px;
+		width: 15em;
+		border: 1px solid #ddd;
+		background: #fafafa;
+		li
+		{
+			float: none;
+			border-top: 1px solid #ddd;
+			&:first-child
+			{
+				border-top: 0;
+			}
+			&:hover
+			{
+				> ul
+				{
+					left: 100px;
+				}
+			}
+		}
+		a
+		{
+			padding: 3px 9px;
+			font-weight: normal;
+		}
+		ul
+		{
+			top: 7px;
+		}
+	}
+}

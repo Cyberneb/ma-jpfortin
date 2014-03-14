@@ -1,0 +1,95 @@
+.opc
+{
+	border-bottom: 1px solid #ddd;
+	position: relative;
+	li
+	{
+		&.section
+		{
+			border: 1px solid #ddd;
+			border-bottom: 0;
+		}
+	}
+	.buttons-set
+	{
+		&.disabled
+		{
+			button
+			{
+				&.button
+				{
+					display: none;
+				}
+			}	
+		}
+		.please-wait
+		{
+			height: 21px;
+			line-height: 21px;
+		}
+	}
+	.step-title
+	{
+		&:extend(.clearer all);
+		padding: 0 5px;
+		background-color: #f6f6f6;
+		text-align: right;
+		.number
+		{
+			float: left;
+			margin-right: 5px;
+			line-height: 22px;
+		}
+		h2
+		{
+			float: left;
+		}
+		a
+		{
+			display: none;
+			float: right;
+		}
+	}
+	.allow
+	{
+		.step-title
+		{
+			cursor: pointer;
+			//a
+			//{
+			//	display: block;
+			//}
+		}
+	}
+	.active
+	{
+		.step-title
+		{
+			background-color: #ccc;
+			cursor: default;
+			//a
+			//{
+			//	display: block;
+			//}
+		}
+	}
+	.step
+	{
+		border-top: 1px solid #ddd;
+		padding: 10px;
+		position: relative;
+		.tool-tip
+		{
+			right: 10px;
+		}
+	}
+	.order-review
+	{
+		.authentication
+		{
+		}
+		.warning-message
+		{
+		}
+	}
+}

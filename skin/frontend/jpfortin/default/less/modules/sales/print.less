@@ -1,0 +1,35 @@
+.page-print
+{
+	.print-head
+	{
+		&:extend(.clearer all);
+		img
+		{
+			float: left;
+		}
+		address
+		{
+			float: left;
+			margin-left: 15px;
+		}
+	}
+	.gift-message-link
+	{
+		display: none;
+	}
+	.price-excl-tax,
+	.price-incl-tax
+	{
+		display: block;
+		white-space: nowrap;
+		.label,
+		.price
+		{
+			display: inline;
+		}
+	}
+	.cart-price
+	{
+		display: inline;
+	}
+}

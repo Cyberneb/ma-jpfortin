@@ -1,0 +1,77 @@
+.success
+{
+	font-weight: bold;
+	color: #3d6611;
+}
+
+.error
+{
+	font-weight: bold;
+	color: #f00;
+}
+
+.notice
+{
+	color: #ccc;
+}
+
+.messages
+{
+	width: 100%;
+	overflow: hidden;
+	&,
+	ul
+	{
+		margin: 0 !important;
+		padding: 0 !important;
+		list-style: none !important;
+	}
+	li
+	{
+		margin: 0 0 10px;
+		li
+	{
+		margin: 0 0 3px;
+	}
+	}
+}
+
+.error-msg,
+.success-msg,
+.note-msg,
+.notice-msg
+{
+	min-height: 24px !important;
+	padding: 8px 8px 8px 32px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	background-position: 10px 9px !important;
+	background-repeat: no-repeat !important;
+	font-weight: bold !important;
+	font-size: 11px !important;
+}
+
+.error-msg
+{
+	border-color: #f16048;
+	background-color: #faebe7;
+	background-image: url(../images/i_msg-error.gif);
+	color: #df280a;
+}
+
+.success-msg
+{
+	border-color: #446423;
+	background-color: #eff5ea;
+	background-image: url(../images/i_msg-success.gif);
+	color: #3d6611;
+}
+
+.note-msg,
+.notice-msg
+{
+	border-color: #fcd344;
+	background-color: #fafaec;
+	background-image: url(../images/i_msg-note.gif);
+	color: #3d6611;
+}

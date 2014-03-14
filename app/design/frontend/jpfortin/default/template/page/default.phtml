@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('body') ?>
+<?php echo $this->getChildHtml('scripts') ?>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

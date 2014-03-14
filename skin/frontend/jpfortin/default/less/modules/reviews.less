@@ -1,0 +1,73 @@
+.product-review
+{
+	&:extend(.clearer all);
+	.product-img-box
+	{
+		float: left;
+		width: 140px;
+		.product-image
+		{
+			display: block;
+			width: 125px;
+			height: 125px;
+		}
+		.label
+		{
+			font-size: 11px;
+			margin: 0 0 3px;
+		}
+	}
+	.product-details
+	{
+		margin-left: 150px;
+	}
+	.product-name
+	{
+		font-size: 16px;
+		font-weight: bold;
+		margin: 0 0 10px;
+	}
+	h3
+	{
+	}
+	dt
+	{
+		font-weight: bold;
+	}
+	dd
+	{
+		font-size: 13px;
+		margin: 5px 0 0;
+	}
+}
+
+.product-view
+{
+	.box-reviews
+	{
+		.item
+		{
+			&:extend(.clearer all);
+		}
+		.form-add
+		{
+		}
+	}
+}
+
+.box-reviews
+{
+	.item
+	{
+		&:extend(.clearer all);
+	}
+}
+
+// SEE ALSO
+// ie.less :
+//     .box-reviews .item,
+//     .product-review
+// modules/customer/dashboard.less :
+//     .dashboard .box-reviews
+// modules/ratings.less :
+//     .product-review

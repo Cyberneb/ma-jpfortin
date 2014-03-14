@@ -1,0 +1,123 @@
+.product-options
+{
+	margin: 10px 0 0;
+	padding: 10px;
+	border: 1px solid #ddd;
+	background-color: #f6f6f6;
+	dt
+	{
+		label
+		{
+			font-weight: bold;
+		}
+		.qty-holder
+		{
+			float: right;
+			label
+			{
+				vertical-align: middle;
+			}
+		}
+		.qty-disabled
+		{
+			background: none;
+			border: 0;
+			padding: 3px;
+			color: #000;
+		}
+	}
+	dd
+	{
+		margin: 10px 0;
+		input
+		{
+			&.input-text
+			{
+				width: 98%;
+			}
+			&.datetime-picker
+			{
+				width: 150px;
+			}
+		}
+		.time-picker
+		{
+			display: -moz-inline-box;
+			display: inline-block;
+			padding: 2px 0;
+			vertical-align: middle;
+		}
+		textarea
+		{
+			width: 98%;
+			height: 8em;
+		}
+		select
+		{
+			width: 100%;
+		}
+	}
+	dl
+	{
+		&.last
+		{
+			dd
+			{
+				&.last
+				{
+				}
+			}
+		}
+	}
+	.options-list
+	{
+		input
+		{
+			&.radio
+			{
+				float: left;
+				margin: 3px -18px 0 0;
+			}
+			&.checkbox
+			{
+				float: left;
+				margin: 3px -20px 0 0;
+			}
+		}
+		.label
+		{
+			display: block;
+			margin-left: 20px;
+		}
+		li
+		{
+			&:extend(.clearer all);
+		}
+	}
+	ul
+	{
+		&.validation-failed
+		{
+			padding: 0 7px;
+		}
+	}
+	p
+	{
+		&.required
+		{
+			padding: 15px 0 0;
+		}
+	}
+}
+
+.product-options-bottom
+{
+	&:extend(.clearer all);
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-top: 0;
+	.price-box
+	{
+		margin: 10px 0;
+	}
+}

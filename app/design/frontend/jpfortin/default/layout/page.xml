@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <default translate="label" module="page">
+        <label>All Pages</label>
+        
+        <block type="page/html" name="root" output="toHtml" template="page/default.phtml">
+
+            <block type="page/html_head" name="head" as="head">
+                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+                <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
+                <action method="addItem"><type>skin_css</type><name>css/ie.css</name><params/><if>lt IE 8</if></action>
+                
+                <action method="addItem"><type>js</type><name>lib/html5shiv.min.js</name><params/><if>lt IE 9</if></action>
+                <action method="addItem"><type>js</type><name>lib/ds-sleight.js</name><params/><if>lt IE 7</if></action>
+                <action method="addItem"><type>skin_js</type><name>js/ie6.js</name><params/><if>lt IE 7</if></action>
+            </block>
+
+            <block type="page/html_wrapper" name="body" as="body" translate="label">
+                <action method="setElementClass"><value>page</value></action>
+
+                <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
+                    <label>Page Top</label>
+                </block>
+
+                <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />
+
+                <block type="page/html_header" name="header" as="header">
+                    <block type="page/template_links" name="top.links" as="topLinks"/>
+                    <block type="page/switch" name="store_language" as="store_language" template="page/switch/languages.phtml"/>
+                    <block type="core/text_list" name="top.menu" as="topMenu" translate="label">
+                        <label>Navigation Bar</label>
+                        <block type="page/html_topmenu" name="catalog.topnav" template="page/html/topmenu.phtml"/>
+                    </block>
+                    <block type="page/html_wrapper" name="top.container" as="topContainer" translate="label">
+                        <label>Page Header</label>
+                        <action method="setElementClass"><value>top-container</value></action>
+                    </block>
+                    <block type="page/html_welcome" name="welcome" as="welcome"/>
+                </block>
+
+                <block type="page/html_wrapper" name="main" as="main">
+                    <action method="setHtmlTagName"><value>main</value></action>
+
+                    <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+
+                    <block type="page/html_wrapper" name="center" as="center" translate="label">
+                        <action method="setElementClass"><value>col-main</value></action>
+
+                        <block type="core/messages" name="global_messages" as="global_messages"/>
+                        <block type="core/messages" name="messages" as="messages"/>
+
+                        <block type="core/text_list" name="content" as="content" translate="label">
+                            <label>Main Content Area</label>
+                        </block>
+
+                    </block>
+
+                    <block type="page/html_wrapper" name="left" as="left" translate="label">
+                        <label>Left Column</label>
+                        <action method="setElementClass"><value>col-left</value></action>
+                    </block>
+
+                    <block type="page/html_wrapper" name="right" as="right" translate="label">
+                        <label>Right Column</label>
+                        <action method="setElementClass"><value>col-right</value></action>
+                    </block>
+                </block>
+
+                <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
+                    <block type="page/html_wrapper" name="bottom.container" as="bottomContainer" translate="label">
+                        <label>Page Footer</label>
+                        <action method="setElementClass"><value>bottom-container</value></action>
+                    </block>
+                    <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>
+                    <block type="page/template_links" name="footer_links" as="footer_links" template="page/template/links.phtml"/>
+                </block>
+
+                <block type="core/text_list" name="before_body_end" as="before_body_end" translate="label">
+                    <label>Page Bottom</label>
+                </block>
+            </block>
+
+            <block type="page/html_head" name="scripts" template="page/html/foot.phtml">
+                <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
+                <action method="addJs"><script>prototype/prototype.js</script></action>
+                <action method="addJs"><script>lib/ccard.js</script></action>
+                <action method="addJs"><script>prototype/validation.js</script></action>
+                <action method="addJs"><script>scriptaculous/builder.js</script></action>
+                <action method="addJs"><script>scriptaculous/effects.js</script></action>
+                <action method="addJs"><script>scriptaculous/dragdrop.js</script></action>
+                <action method="addJs"><script>scriptaculous/controls.js</script></action>
+                <action method="addJs"><script>scriptaculous/slider.js</script></action>
+                <action method="addJs"><script>varien/js.js</script></action>
+                <action method="addJs"><script>varien/form.js</script></action>
+                <action method="addJs"><script>mage/translate.js</script></action>
+                <action method="addJs"><script>mage/cookies.js</script></action>
+                <action method="addJs"><script>lesite/scripts.js</script></action>
+                <action method="addItem"><type>js</type><name>lib/selectivizr.min.js</name><params/><if>lt IE 9</if></action>
+                <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
+            </block>
+        </block>
+
+        <block type="core/profiler" output="toHtml" name="core_profiler"/>
+    </default>
+
+    <print translate="label" module="page">
+        <label>All Pages (Print Version)</label>
+        <block type="page/html" name="root" output="toHtml" template="page/print.phtml">
+
+            <block type="page/html_head" name="head" as="head">
+                <action method="addJs"><script>prototype/prototype.js</script></action>
+                <action method="addJs"><script>mage/translate.js</script></action>
+                <action method="addJs"><script>lib/ccard.js</script></action>
+                <action method="addJs"><script>prototype/validation.js</script></action>
+                <action method="addJs"><script>varien/js.js</script></action>
+
+                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+                <action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>lt IE 8</if></action>
+                <action method="addCss"><stylesheet>css/widgets.css</stylesheet></action>
+                <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
+
+                <action method="addItem"><type>js</type><name>lib/ds-sleight.js</name><params/><if>lt IE 7</if></action>
+                <action method="addItem"><type>skin_js</type><name>js/ie6.js</name><params/><if>lt IE 7</if></action>
+
+            </block>
+
+            <block type="core/text_list" name="content" as="content" translate="label">
+                <label>Main Content Area</label>
+            </block>
+
+        </block>
+    </print>
+
+    <popup translate="label" module="page">
+        <label>All Popups</label>
+        <reference name="root">
+            <action method="setTemplate"><template>page/popup.phtml</template></action>
+            <action method="append"><block>content</block></action>
+            <action method="unsetChild"><name>head</name></action>
+            <action method="unsetChild"><name>body</name></action>
+        </reference>
+    </popup>
+
+    <page_empty translate="label">
+        <label>All Empty Layout Pages</label>
+        <reference name="root">
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="body">
+            <action method="unsetChild"><name>header</name></action>
+            <action method="unsetChild"><name>footer</name></action>
+        </reference>
+    </page_empty>
+
+    <page_one_column translate="label">
+        <label>All One-Column Layout Pages</label>
+        <reference name="root">
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="main">
+            <action method="unsetChild"><name>left</name></action>
+            <action method="unsetChild"><name>right</name></action>
+        </reference>
+    </page_one_column>
+
+    <page_two_columns_left translate="label">
+        <label>All Two-Column Layout Pages (Left Column)</label>
+        <reference name="root">
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="col2-left">
+            <action method="setElementClass"><value>col2-left-layout</value></action>
+            <action method="unsetChild"><name>right</name></action>
+        </reference>
+    </page_two_columns_left>
+
+    <page_two_columns_right translate="label">
+        <label>All Two-Column Layout Pages (Right Column)</label>
+        <reference name="root">
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="main">
+            <action method="setElementClass"><value>col2-right-layout</value></action>
+            <action method="unsetChild"><name>left</name></action>
+        </reference>
+    </page_two_columns_right>
+
+    <page_three_columns translate="label">
+        <label>All Three-Column Layout Pages</label>
+        <reference name="root">
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="main">
+            <action method="setElementClass"><value>col3-layout</value></action>
+            <block type="page/html_wrapper" name="wrapper" as="wrapper" translate="label" before="right">
+                <action method="setElementClass"><value>col-wrapper</value></action>
+                <action method="append"><block>center</block></action>
+                <action method="append"><block>left</block></action>
+            </block>
+            <action method="unsetChild"><name>center</name></action>
+            <action method="unsetChild"><name>left</name></action>
+        </reference>
+    </page_three_columns>
+
+</layout>

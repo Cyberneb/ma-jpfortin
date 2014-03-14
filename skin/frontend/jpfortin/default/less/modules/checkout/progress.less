@@ -1,0 +1,35 @@
+.block-progress
+{
+	dt
+	{
+		font-weight: bold;
+	}
+	dt,
+	dd
+	{
+		&.complete
+		{
+			background-color: #f6f6f6;
+		}
+	}
+}
+
+.checkout-progress
+{
+	&:extend(.clearer all);
+	margin: 10px 0;
+	padding: 0 50px;
+	li
+	{
+		float: left;
+		width: 20%;
+		border-top: 5px solid #ccc;
+		text-align: center;
+		color: #ccc;
+		&.active
+		{
+			border-top-color: #000;
+			color: #000;
+		}
+	}
+}

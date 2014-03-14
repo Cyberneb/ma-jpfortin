@@ -1,0 +1,96 @@
+.no-rating
+{
+	margin: 0;
+}
+
+.ratings
+{
+	&:extend(.clearer all);
+	margin: 7px 0;
+	line-height: 1.25;
+	font-size: 11px;
+	strong
+	{
+		float: left;
+		margin: 1px 3px 0 0;
+	}
+	.rating-links
+	{
+		margin: 0;
+		.separator
+		{
+			margin: 0 2px;
+		}
+	}
+	dt
+	{
+	}
+	dd
+	{
+	}
+	.rating-box
+	{
+		float: left;
+		margin-right: 3px;
+	}
+	.amount
+	{
+	}
+}
+
+.rating-box
+{
+	width: 69px;
+	height: 13px;
+	overflow: hidden;
+	background: url(../images/bkg_rating.gif) 0 0 repeat-x;
+	text-indent: -999em;
+	line-height: 0;
+	font-size: 0;
+	.rating
+	{
+		float: left;
+		height: 13px;
+		background: url(../images/bkg_rating.gif) 0 100% repeat-x;
+	}
+}
+
+.ratings-table
+{
+	th,
+	td
+	{
+		padding: 3px 0;
+		line-height: 1.15;
+		font-size: 11px;
+	}
+	th
+	{
+		padding-right: 8px;
+		font-weight: bold;
+	}
+}
+
+.product-review
+{
+	.product-img-box
+	{
+		.ratings
+		{
+			.rating-box
+			{
+				float: none;
+				display: block;
+				margin: 0 0 3px;
+			}
+		}
+	}
+	.ratings-table
+	{
+		margin: 0 0 10px;
+	}
+}
+
+// SEE ALSO
+// ie.less :
+//     .ratings

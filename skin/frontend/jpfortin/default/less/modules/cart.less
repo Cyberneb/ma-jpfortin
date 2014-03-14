@@ -1,0 +1,69 @@
+.cart
+{
+	&:extend(.clearer all);
+	.checkout-types
+	{
+		float: right;
+		text-align: right;
+	}
+	.title-buttons
+	{
+		.checkout-types
+		{
+			li
+			{
+				float: left;
+				margin: 0 0 5px 5px;
+			}
+		}
+	}
+	.totals
+	{
+		float: right;
+		table
+		{
+			width: 100%;
+			th,
+			td
+			{
+				padding: 5px;
+			}
+			th
+			{
+				font-weight: bold;
+			}
+			tfoot
+			{
+				th
+				{
+				}
+			}
+		}
+	}
+}
+
+.cart-table
+{
+	.item-msg
+	{
+		font-size: 10px;
+	}
+}
+
+.item-options
+{
+	dt
+	{
+		font-weight: bold;
+		font-style: italic;
+	}
+	dd
+	{
+		padding-left: 10px;
+	}
+}
+
+@import 'cart/collaterals';
+@import 'cart/sidebar';
+@import 'cart/tax';
+@import 'cart/truncated';

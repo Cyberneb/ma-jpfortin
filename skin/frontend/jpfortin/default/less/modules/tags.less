@@ -1,0 +1,64 @@
+.tags-list
+{
+	li
+	{
+		display: inline;
+	}
+}
+
+.block-tags
+{
+	ul,
+	li
+	{
+		display: inline;
+	}
+}
+
+.box-tags
+{
+	.item
+	{
+		&:extend(.clearer all);
+	}
+}
+
+.product-view
+{
+	.box-tags
+	{
+		.form-add
+		{
+			&:extend(.clearer all);
+			label
+			{
+				float: left;
+			}
+			.input-box
+			{
+				float: left;
+				width: 260px;
+				margin: 0 5px;
+			}
+			input
+			{
+				&.input-text
+				{
+					width: 254px;
+				}
+			}
+			p
+			{
+				clear: both;
+			}
+		}
+	}
+}
+
+// SEE ALSO
+// ie.less :
+//     .product-view .box-tags .form-add .input-box,
+//     .box-tags .item,
+//     .product-view .box-tags .form-add
+// modules/customer/dashboard.less :
+//     .dashboard .box-tags

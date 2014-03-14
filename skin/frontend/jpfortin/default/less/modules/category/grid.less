@@ -1,0 +1,64 @@
+.products-grid
+{
+	&:extend(.clearer all);
+	position: relative;
+	+ .products-grid
+	{
+		border-top: 1px solid #ddd;
+	}
+	.item
+	{
+		float: left;
+		width: 33%;
+		padding: 12px 10px 80px;
+	}
+	.product-image
+	{
+		display: block;
+		margin: 0 0 10px;
+	}
+	.product-name
+	{
+		margin: 0 0 5px;
+		font-weight: bold;
+		font-size: 13px;
+		a
+		{
+		}
+	}
+	.price-box
+	{
+		margin: 5px 0;
+	}
+	.availability
+	{
+		line-height: 21px;
+	}
+	.actions
+	{
+		position: absolute;
+		bottom: 12px;
+	}
+}
+
+.col2-left-layout,
+.col2-right-layout
+{
+	.products-grid
+	{
+		.item
+		{
+			width: 25%;
+		}
+	}
+}
+.col1-layout
+{
+	.products-grid
+	{
+		.item
+		{
+			width: 20%;
+		}
+	}
+}

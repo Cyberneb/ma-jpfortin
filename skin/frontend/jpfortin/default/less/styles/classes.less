@@ -1,0 +1,166 @@
+.links
+{
+	li
+	{
+		display: inline;
+		&.first
+		{
+			padding-left: 0 !important;
+		}
+		&.last
+		{
+			padding-right: 0 !important;
+			background: none !important;
+		}
+	}
+}
+
+.link-cart
+{
+	font-weight: bold;
+	color: #f00;
+}
+
+.link-reorder
+{
+	font-weight: bold;
+}
+
+.link-print
+{
+	padding: 2px 0 2px 25px;
+	background: url(../images/i_print.gif) 0 2px no-repeat;
+}
+
+.btn-remove
+{
+	display: block;
+	width: 11px;
+	height: 11px;
+	overflow: hidden;
+	background: url(../images/btn_remove.gif) 0 0 no-repeat;
+	text-indent: -999em;
+	line-height: 0;
+	font-size: 0;
+}
+
+.btn-remove2
+{
+	display: block;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+	background: url(../images/btn_trash.gif) 0 0 no-repeat;
+	text-indent: -999em;
+	line-height: 0;
+	font-size: 0;
+}
+
+.btn-edit
+{
+	display: block;
+	width: 11px;
+	height: 11px;
+	overflow: hidden;
+	background: url(../images/btn_edit.gif) 0 0 no-repeat;
+	text-indent: -999em;
+	line-height: 0;
+	font-size: 0;
+}
+
+.cards-list
+{
+	dt
+	{
+		margin: 5px 0 0;
+	}
+	.offset
+	{
+		padding: 2px 0 2px 20px;
+	}
+}
+
+.separator
+{
+	margin: 0 3px;
+}
+
+.divider
+{
+	display: block;
+	clear: both;
+	height: 1px;
+	overflow: hidden;
+	margin: 10px 0;
+	background: #ddd;
+	text-indent: -999em;
+	line-height: 0;
+	font-size: 0;
+}
+
+.decorated
+{
+	tbody
+	{
+		td
+		{
+			border-width: 0 1px;
+		}
+		tr
+		{
+			&.odd,
+			&:nth-child(2n+1)
+			{
+			}
+			&.even,
+			&:nth-child(2n)
+			{
+				background-color: #f6f6f6;
+			}
+			&.border
+			{
+				td
+				{
+					border-bottom-width: 1px;
+				}
+			}
+		}
+	}
+	tr
+	{
+		&.first,
+		&:first-child
+		{
+		}
+		&.last,
+		&:last-child
+		{
+		}
+	}
+	li
+	{
+		&.odd,
+		&:nth-child(2n+1)
+		{
+			background-color: #f3f3f3;
+		}
+		&.even,
+		&:nth-child(2n)
+		{
+		}
+	}
+}
+
+.clearer
+{
+	&:after
+	{
+		display: block;
+		content: ".";
+		clear: both;
+		font-size: 0;
+		line-height: 0;
+		height: 0;
+		overflow: hidden;
+	}
+}

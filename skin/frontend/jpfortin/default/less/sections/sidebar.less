@@ -1,0 +1,75 @@
+.block
+{
+	margin: 0 0 10px;
+	border: 1px solid #ddd;
+	.block-title
+	{
+		padding: 3px 10px;
+		border-bottom: 1px solid #ddd;
+		strong
+		{
+			font-size: 14px;
+			font-weight: bold;
+			span
+			{
+			}
+		}
+		a
+		{
+			text-decoration: none !important;
+		}
+	}
+	.block-subtitle
+	{
+		font-weight: bold;
+		font-size: 13px;
+	}
+	.block-content
+	{
+		&:extend(.clearer all);
+		padding: 10px;
+		.item
+		{
+			&:extend(.clearer all);
+			padding: 5px 0;
+		}
+	}
+	.btn-remove,
+	.btn-edit
+	{
+		float: right;
+	}
+	.actions
+	{
+		&:extend(.clearer all);
+		text-align: right;
+		a
+		{
+			float: left;
+		}
+	}
+	.empty
+	{
+	}
+}
+
+.block-currency
+{
+	select
+	{
+		width: 100%;
+		border: 1px solid #888;
+	}
+}
+
+.block-subscribe
+{
+}
+
+.block-banner
+{
+	.block-content
+	{
+		text-align: center;
+	}
+}

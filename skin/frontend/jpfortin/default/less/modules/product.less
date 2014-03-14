@@ -1,0 +1,91 @@
+@import 'product/add';
+@import 'product/alert';
+@import 'product/availability';
+@import 'product/image';
+@import 'product/options';
+@import 'product/price';
+@import 'product/share';
+@import 'product/sidebar';
+
+.product-name
+{
+	font-size: 1em;
+	font-weight: normal;
+	a
+	{
+	}
+}
+
+.product-view
+{
+	.product-shop
+	{
+		float: right;
+		width: 60%;
+	}
+	.product-name
+	{
+	}
+	.short-description
+	{
+		&:extend(.clearer all);
+	}
+	.grouped-items-table
+	{
+	}
+	.box-description
+	{
+		&:extend(.clearer all);
+	}
+	.box-additional
+	{
+	}
+	.box-up-sell
+	{
+		.products-grid
+		{
+			td
+			{
+				width: 25%;
+			}
+		}
+	}
+}
+
+.product-essential
+{
+	&:extend(.clearer all);
+}
+
+.product-collateral
+{
+	&:extend(.clearer all);
+	.box-collateral
+	{
+		margin: 0 0 15px;
+	}
+}
+
+.col1-layout
+{
+	.product-view
+	{
+		.product-shop
+		{
+			float: right;
+			width: 700px;
+		}
+	}
+}
+
+.col3-layout
+{
+	.product-view
+	{
+		.product-shop
+		{
+			float: none;
+			width: auto;
+		}
+	}
+}
