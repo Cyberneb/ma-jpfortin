@@ -9,8 +9,8 @@ $installer->startSetup();
 
 $installer->run("
 
--- DROP TABLE IF EXISTS {$this->getTable('slider')};
-CREATE TABLE {$this->getTable('slider')} (
+-- DROP TABLE IF EXISTS {$this->getTable('slider/slider')};
+CREATE TABLE {$this->getTable('slider/slider')} (
   `slider_id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `status` tinyint(1) NULL DEFAULT '1',
