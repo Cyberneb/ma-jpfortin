@@ -45,13 +45,7 @@ class Lesite_Slider_Block_Adminhtml_Slide_Grid extends Mage_Adminhtml_Block_Widg
           'header'    => Mage::helper('slider')->__('Name'),
           'align'     =>'left',
           'index'     => 'name',
-      ));
-      
-      $this->addColumn('redirect_to', array(
-          'header'    => Mage::helper('slider')->__('Redirect To'),
-          'align'     =>'left',
-          'index'     => 'redirect_to',
-      ));
+      ));            
 
       $this->addColumn('position', array(
           'header'    => Mage::helper('slider')->__('Order'),

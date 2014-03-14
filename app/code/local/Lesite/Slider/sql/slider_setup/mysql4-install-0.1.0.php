@@ -21,9 +21,13 @@ CREATE TABLE {$this->getTable('slider/slider')} (
 -- DROP TABLE IF EXISTS {$this->getTable('slider/slide')};
 CREATE TABLE {$this->getTable('slider/slide')} (
   `slide_id` int(11) unsigned NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `redirect_to` varchar(255) NOT NULL default '',
-  `image_path` varchar(255) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',  
+  `image_path` varchar(255) NOT NULL default '',  
+  `content` TEXT NOT NULL default '',
+  `button_label_1` VARCHAR(255) NOT NULL default '',
+  `button_category_id_1` INT,
+  `button_label_2` VARCHAR(255) NOT NULL default '',
+  `button_category_id_2` INT,
   `position` smallint(5) unsigned NOT NULL,
   `status` smallint(6) NOT NULL default '0',
   `slider_id` int(11) unsigned DEFAULT '0',

@@ -1,73 +1,62 @@
 <?php
+
 /**
  * Le Site custom slider
+ * @method int getSliderId()
+ * @method Lesite_Slider_Block_Slider setSliderId(string $value)
  */
-class Lesite_Slider_Block_Slider extends Mage_Core_Block_Template
-{
-    protected $_position = null;
-    protected $_isActive = 1;
-    protected $_collection;
+class Lesite_Slider_Block_Slider extends Mage_Core_Block_Template {
 
-    public function _getCollection($position = null) {
-        if ($this->_collection) {
-            return $this->_collection;
-        }
-
-      //  $storeId = Mage::app()->getStore()->getId();
-        $this->_collection = Mage::getModel('slider/slider')->getCollection()
-                ->addEnableFilter($this->_isActive);
-       /* if (!Mage::app()->isSingleStoreMode()) {
-            $this->_collection->addStoreFilter($storeId);
-        }*/
-
-        if (Mage::registry('current_category') && !Mage::registry('current_product')) {
-            $_categoryId = Mage::registry('current_category')->getId();
-            $this->_collection->addCategoryFilter($_categoryId);
-        } elseif (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms') {
-            $_pageId = Mage::getBlockSingleton('cms/page')->getPage()->getPageId();
-            $this->_collection->addPageFilter($_pageId);
-        }
-        else
-        {
-            return false;
-        }
-
-        if ($position) {
-            $this->_collection->addPositionFilter($position);
-        } elseif ($this->_position) {
-            $this->_collection->addPositionFilter($this->_position);
-        }
-        return $this->_collection;
+    /**
+     * 
+     * @return boolean
+     */
+    public function canShow() {
+        return $this->getSlider()->getStatus() && $this->getSlides()->count();
     }
-    
-    public function _getSlidesCollection($slider_id = null) {
-        if (!$slider_id) {
-            $collection = null;
+
+    /**
+     * 
+     * @return Lesite_Slider_Model_Slider
+     */
+    public function getSlider() {
+        $_key = 'slider';
+        if (!$this->hasData($_key)) {
+            $slider = Mage::getModel('slider/slider')->load($this->getSliderId());
+            /* @var $slider Lesite_Slider_Model_Slider */
+            $this->setData($_key, $slider);
         }
-        else
-        {
-            $collection = Mage::getModel('slider/slide')
-                ->getCollection()
-                ->addFieldToFilter('slider_id', $slider_id)
-                ->addEnableFilter($this->_isActive)
-                ->setOrder('position', 'ASC');
-        }
-        return $collection;
+        return $this->getData($_key);
     }
-    
-    public function getCacheKey()
-    {
-        if (!$this->hasData('cache_key')) {
-            if (Mage::registry('current_category') && !Mage::registry('current_product')) {
-                $_categoryId = Mage::registry('current_category')->getId();
-                $cacheKey = 'POSITION_'.$this->_position.'LAYOUT_'.$this->getNameInLayout().'_CATEGORY'.$_categoryId;
-            } elseif (Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms') {
-                $_pageId = Mage::getBlockSingleton('cms/page')->getPage()->getPageId();
-                $cacheKey = 'POSITION_'.$this->_position.'LAYOUT_'.$this->getNameInLayout().'_PAGE'.$_pageId;
-            }
-        	$this->setCacheKey($cacheKey);
+
+    /**
+     *
+     * @return Lesite_Slider_Model_Mysql4_Slide_Collection
+     */
+    public function getSlides() {
+        $_key = 'slides';
+        if (!$this->hasData($_key)) {
+            $slides = $this->getSlider()->getSlides();
+            $slides->addStoreFilter();
+            $slides->addEnableFilter();
+            $slides->setOrder('position', Varien_Data_Collection::SORT_ORDER_ASC);
+            $this->setData($_key, $slides);
         }
-        return $this->getData('cache_key');
+        return $this->getData($_key);
     }
-    
+
+    /**
+     * 
+     * @param int $id
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCategory($id) {
+        $category = Mage::getModel('catalog/category')->load($id);
+        /* @var $category Mage_Catalog_Model_Category */
+        if ($category->getId() && $category->getIsActive()) {
+            return $category;
+        }
+        return FALSE;
+    }
+
 }

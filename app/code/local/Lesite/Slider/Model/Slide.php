@@ -5,9 +5,7 @@
  * @method int getId()
  * @method Lesite_Slider_Model_Slide setId(int $value)
  * @method string getName()
- * @method Lesite_Slider_Model_Slide setName(string $value)
- * @method string getRedirectTo()
- * @method Lesite_Slider_Model_Slide setRedirectTo(string $value)
+ * @method Lesite_Slider_Model_Slide setName(string $value) 
  * @method string getImagePath()
  * @method Lesite_Slider_Model_Slide setImagePath(string $value)
  * @method string getImageAlt()
@@ -20,6 +18,8 @@
  * @method Lesite_Slider_Model_Slide setSliderId(int $value)
  * @method array getStores()
  * @method Lesite_Slider_Model_Slide setStores(array $value)
+ * @method string getContent()
+ * @method Lesite_Slider_Model_Slide setContent(string $value) 
  * @method Lesite_Slider_Model_Slide setImageUrl(string $value)
  */
 class Lesite_Slider_Model_Slide extends Mage_Core_Model_Abstract {
@@ -56,6 +56,14 @@ class Lesite_Slider_Model_Slide extends Mage_Core_Model_Abstract {
             $this->setData($_key, $value);
         }
         return $this->getData($_key);
+    }
+
+    public function getButtonLabel($index = 1) {
+        return $this->getData('button_label_' . $index);
+    }
+
+    public function getButtonCategoryId($index = 1) {
+        return $this->getData('button_category_id_' . $index);
     }
 
 }

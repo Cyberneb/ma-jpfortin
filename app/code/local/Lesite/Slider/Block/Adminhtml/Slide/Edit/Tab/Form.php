@@ -48,19 +48,51 @@ class Lesite_Slider_Block_Adminhtml_Slide_Edit_Tab_Form extends Mage_Adminhtml_B
             'value'    => $_model->getName()
         ));
 
-        $fieldset->addField('redirect_to', 'text', array(
-            'label'    => Mage::helper('slider')->__('Redirect to'),
-            'required' => true,
-            'name'     => 'redirect_to',
-            'value'    => $_model->getRedirectTo()
+        $fieldset->addField('image_path', 'hidden', array(
+            'label'    => Mage::helper('slider')->__('Image'),
+            'required' => false,
+            'name'     => 'image_path',
+            'value'    => $_model->getImagePath()
         ));
 
+        $fieldset->addType('image', Mage::getConfig()->getBlockClassName('slider/adminhtml_slide_helper_image'));
+        $field = $fieldset->addField('image_file', 'image', array(
+            'label'    => Mage::helper('slider')->__('Image'),
+            'required' => $_model->getImageUrl() === FALSE,
+            'name'     => 'image_file',
+            'value'    => $_model->getImageUrl()
+        ));
+
+
         $fieldset->addField('image_alt', 'text', array(
-            'label'    => Mage::helper('slider')->__('Description'),
+            'label'    => Mage::helper('slider')->__('Image Description'),
             'required' => false,
             'name'     => 'image_alt',
             'value'    => $_model->getImageAlt()
         ));
+
+        $fieldset->addField('content', 'textarea', array(
+            'label'    => Mage::helper('slider')->__('Content'),
+            'required' => false,
+            'name'     => 'content',
+            'value'    => $_model->getContent()
+        ));
+
+        foreach (array(1, 2) as $index) {
+            $fieldset->addField('button_label_' . $index, 'text', array(
+                'label'    => Mage::helper('slider')->__('Button Label %s', $index),
+                'required' => false,
+                'name'     => 'button_label_' . $index,
+                'value'    => $_model->getButtonLabel($index)
+            ));
+
+            $fieldset->addField('button_category_id_' . $index, 'text', array(
+                'label'    => Mage::helper('slider')->__('Button Category %s', $index),
+                'required' => false,
+                'name'     => 'button_category_id_' . $index,
+                'value'    => $_model->getButtonCategoryId($index)
+            ));
+        }
 
         $fieldset->addField('slider_id', 'hidden', array(
             'name'     => 'slider_id',
@@ -89,21 +121,6 @@ class Lesite_Slider_Block_Adminhtml_Slide_Edit_Tab_Form extends Mage_Adminhtml_B
                 ),
             ),
             'value'  => $_model->getStatus()
-        ));
-
-        $fieldset->addField('image_path', 'hidden', array(
-            'label'    => Mage::helper('slider')->__('Image'),
-            'required' => false,
-            'name'     => 'image_path',
-            'value'    => $_model->getImagePath()
-        ));
-
-        $fieldset->addType('image', Mage::getConfig()->getBlockClassName('slider/adminhtml_slide_helper_image'));
-        $field = $fieldset->addField('image_file', 'image', array(
-            'label'    => Mage::helper('slider')->__('Image'),
-            'required' => $_model->getImageUrl() === FALSE,
-            'name'     => 'image_file',
-            'value'    => $_model->getImageUrl()
         ));
 
         if (!$_model->getId() && Mage::getSingleton('adminhtml/session')->getLookbookData()) {
