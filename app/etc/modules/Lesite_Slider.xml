@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Le Site custom slider
+ */
+-->
+<config>
+    <modules>
+        <Lesite_Slider>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Core/>
+                <Mage_Adminhtml/>
+                <Mage_Catalog/>
+		<Mage_Cms/>
+            </depends>
+        </Lesite_Slider>
+    </modules>
+</config> 

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Le Site custom slider
+ */
+-->
+<layout version="0.1.0">
+    <slider_adminhtml_slider_index>
+        <reference name="content">
+            <block type="slider/adminhtml_slider" name="slider" />
+        </reference>
+    </slider_adminhtml_slider_index>
+    <slider_adminhtml_slider_edit>
+        <reference name="head">
+            <action method="addJs"><script>lib/flex.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/flexuploader.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/browser.js</script></action>
+            <action method="addItem"><type>js_css</type><name>prototype/windows/themes/default.css</name></action>
+        </reference>
+    </slider_adminhtml_slider_edit>
+    <slider_adminhtml_slide_index>
+        <reference name="content">
+            <block type="slider/adminhtml_slide" name="slide" />
+        </reference>
+    </slider_adminhtml_slide_index>
+    <slider_adminhtml_slide_edit>
+        <reference name="head">
+                <action method="addCss"><stylesheet>slider/css/annotation.css</stylesheet></action>
+                <action method="addCss"><stylesheet>slider/css/fileuploader.css</stylesheet></action>
+                 <action method="addJs"><script>slider/jquery-1.8.2.min.js</script></action>
+                 <action method="addJs"><script>slider/jquery-ui-1.9.1.js</script></action>
+                 <action method="addJs"><script>slider/jquery.annotate.js</script></action>
+                 <action method="addJs"><script>slider/fileuploader.js</script></action>
+                 <action method="addJs"><script>slider/json2.min.js</script></action>
+        </reference>
+    </slider_adminhtml_slide_edit>
+</layout>
