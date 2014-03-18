@@ -1,0 +1,41 @@
+<div id="newsletter-popup" class="block block-subscribe" style="display: none">
+    <div class="block-title">
+        <strong><span><?php echo Mage::getStoreConfig('newsletter/popup/title') ?></span></strong>
+        <a href="#" title="<?php echo $this->__('Close') ?>" class="close"><?php echo $this->__('Close') ?></a>
+    </div>
+    <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-popup-validate-detail">
+        <div class="block-content">
+            <div class="form-subscribe-header">
+                <?php echo $this->__('Be the first to know about new products, special offers, store events and more') ?>
+            </div>
+            <div class="input-box">
+                <input type="text" name="email" placeholder="<?php echo $this->__('Enter your Email Address') ?>" class="input-text required-entry validate-email" />
+                <button type="submit" title="<?php echo Mage::getStoreConfig('newsletter/popup/submit_text') ?>" class="button"><?php echo Mage::getStoreConfig('newsletter/popup/submit_text') ?></button>
+            </div>
+            <p>
+                <input type="checkbox" name="jpf" id="newsletter-popup-jpf" value="" />
+                <label for="newsletter-popup-jpf"><?php echo $this->__('JP FORTIN'); ?></label>
+                <input type="checkbox" name="lpst" id="newsletter-popup-lpst" value="" />
+                <label for="newsletter-popup-lpst"><?php echo $this->__('LES PIEDS SUR TERRE'); ?></label>
+            </p>
+            <div class="message"></div>
+        </div>
+    </form>
+    <script>
+        jsQueue.push(function() {
+            window.newsletterPopupSubscriberFormDetail = new VarienForm('newsletter-popup-validate-detail');
+            if (!Mage.Cookies.get('newsletter-popup')) {
+                var expires = new Date();
+                expires.setMonth(expires.getMonth() + 1);
+                Mage.Cookies.set('newsletter-popup', true, expires);
+                Effect.SlideDown('newsletter-popup', {duration: 0.5});
+                $$('#newsletter-popup .close').each(function(elem) {
+                    elem.observe('click', function(e) {
+                        Event.stop(e);
+                        Effect.SlideUp('newsletter-popup', {duration: 0.5});
+                    });
+                });
+            }
+        });
+    </script>
+</div>
