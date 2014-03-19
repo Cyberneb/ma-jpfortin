@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Brand Module by Lesite
+@copyright   Copyright (c) 2014 Lesite http://www.lesite.ca/ 
+-->
+
+
+<config>
+    <modules>
+        <Lesite_Brand>
+            <version>1.0.0.0</version>
+        </Lesite_Brand>
+    </modules>
+    <global>
+        <helpers>
+            <lesite_brand>
+                <class>Lesite_Brand_Helper</class>
+            </lesite_brand>
+        </helpers>
+        <models>
+            <brand>
+                <class>Lesite_Brand_Model</class>
+                <resourceModel>brand_resource</resourceModel>
+            </brand>
+            <brand_resource>
+                <class>Lesite_Brand_Model_Resource</class>
+                <entities>
+                    <brand>
+                        <table>lesite_brand</table>
+                    </brand>
+                    <storevalue>
+                        <table>lesite_brand_store_value</table>
+                    </storevalue>
+                    <urlrewrite>
+                            <table>core_url_rewrite</table>
+                    </urlrewrite>
+                    </entities>
+            </brand_resource>
+        </models>
+         <resources>
+            <brand_setup>
+                <setup>
+                    <module>Lesite_Brand</module>
+                    <class>Lesite_Brand_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </brand_setup>
+        </resources>
+        <blocks>
+            <lesite_brand>
+                <class>Lesite_Brand_Block</class>
+            </lesite_brand>
+        </blocks>
+        <events>
+            <before_brand_item_display>
+                <observers>
+                    <lesite_brand>
+                        <class>lesite_brand/observer</class>
+                        <method>beforeBrandDisplayed</method>
+                    </lesite_brand>
+                </observers>
+            </before_brand_item_display>
+        </events>
+    </global>
+     <frontend>
+        <routers>
+            <brand>
+                <use>standard</use>
+                <args>
+                    <module>Lesite_Brand</module>
+                    <frontName>brand</frontName>
+                </args>
+            </brand>
+        </routers>
+        <layout>
+            <updates>
+                <lesite_brand>
+                    <file>lesite_brand.xml</file>
+                </lesite_brand>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Lesite_Brand before="Mage_Adminhtml">Lesite_Brand_Adminhtml</Lesite_Brand>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <lesite_brand>
+                    <file>lesite_brand.xml</file>
+                </lesite_brand>
+            </updates>
+        </layout>
+        <menu>
+            <cms>
+                <children>
+                    <brand translate="title" module="lesite_brand"> 
+                        <title>Brand</title>
+                        <sort_order>65</sort_order>
+                        <children>
+                            <brand translate="title" module="lesite_brand">
+                                <title>Manage Brands</title> 
+                                <action>adminhtml/brand</action> 
+                                <sort_order>51</sort_order>
+                            </brand>
+                        </children>
+                    </brand>
+                </children>
+            </cms>        
+        </menu>
+    </adminhtml>
+</config>

@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="header">
+            <block type="lesite_brand/menubar" name="brandsMenuBar" template="lesite/brand/menubar.phtml"/>
+        </reference>
+    </default>
+    <brand_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/default.phtml</template>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Brands List</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_brand/brand" name="brand" template="lesite/brand/index.phtml" />
+            <remove name="catalog.compare.sidebar"/>
+            <remove name="right.poll"/>
+            <remove name="cart_sidebar"/>
+            <remove name="right.reports.product.viewed"/>
+            <remove name="catalog.leftnav"/>
+            <remove name="right.permanent.callout" />
+            <remove name="left.permanent.callout" />
+            <remove name="left.newsletter" />
+        </reference>
+    </brand_index_index>
+    <brand_index_list>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Brands List</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_brand/brand" name="brand" template="lesite/brand/list.phtml" />
+        </reference>
+    </brand_index_list>
+    <brand_index_view>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/default.phtml</template>
+            </action>
+        </reference>
+        <reference name="right">
+            <block type="lesite_brand/view" before="-" name="viewsidebar" template="lesite/brand/view-sidebar.phtml">
+                <block type="lesite_brand/layer_view" name="brand-leftnav" before="search_result_list" template="catalog/layer/view.phtml"/>
+            </block>
+            <remove name="right.poll"/>
+            <remove name="cart_sidebar"/>
+            <remove name="catalog.compare.sidebar"/>
+            <remove name="right.reports.product.viewed"/>
+            <remove name="catalog.leftnav"/>
+            <remove name="right.permanent.callout" /><remove name="right.permanent.callout" />
+            <remove name="left.permanent.callout" />
+            <remove name="left.newsletter" />
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Brands Products</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_brand/view" name="brandView" template="lesite/brand/view.phtml" />
+        </reference>
+    </brand_index_view>
+    <brand_index_nav>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/default.phtml</template>
+            </action>
+        </reference>
+        <reference name="right">
+            <block type="lesite_brand/view" before="-" name="viewsidebar" template="lesite/brand/view-sidebar.phtml">
+                <block type="lesite_brand/layer_view" name="brand-leftnav" before="search_result_list" template="catalog/layer/view.phtml"/>
+            </block>
+            <remove name="right.poll"/>
+            <remove name="cart_sidebar"/>
+            <remove name="catalog.compare.sidebar"/>
+            <remove name="right.reports.product.viewed"/>
+            <remove name="catalog.leftnav"/>
+            <remove name="right.permanent.callout" /><remove name="right.permanent.callout" />
+            <remove name="left.permanent.callout" />
+            <remove name="left.newsletter" />
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title">
+                <title>Brands Products</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_brand/view" name="brandNav" template="lesite/brand/nav.phtml" />
+            <block type="lesite_brand/product" name="brandProducts" template="catalog/product/list.phtml">
+                <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                    <block type="page/html_pager" name="product_list_toolbar_pager" />
+                </block>
+                <action method="setColumnCount">
+                    <column_count>4</column_count>
+                </action>
+                <action method="setToolbarBlockName">
+                    <name>product_list_toolbar</name>
+                </action>
+                <action method="addColumnCountLayoutDepend">
+                    <layout>empty</layout>
+                    <count>6</count>
+                </action>
+                <action method="addColumnCountLayoutDepend">
+                    <layout>one_column</layout>
+                    <count>5</count>
+                </action>
+                <action method="addColumnCountLayoutDepend">
+                    <layout>two_columns_left</layout>
+                    <count>4</count>
+                </action>
+                <action method="addColumnCountLayoutDepend">
+                    <layout>two_columns_right</layout>
+                    <count>4</count>
+                </action>
+                <action method="addColumnCountLayoutDepend">
+                    <layout>three_columns</layout>
+                    <count>3</count>
+                </action>
+                <action method="setToolbarBlockName">
+                    <name>product_list_toolbar</name>
+                </action>
+            </block>
+        </reference>
+    </brand_index_nav>
+    <catalog_product_view>
+        <reference name="alert.urls">
+            <block type="lesite_brand/productpage" name="brand_productpage" template="lesite/brand/productpage.phtml"/>
+        </reference>
+    </catalog_product_view>
+</layout>

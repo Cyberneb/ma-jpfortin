@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+Brand Module by Lesite
+Each line should be prefixed with 
+-->
+
+
+<layout>
+    <adminhtml_brand_index>
+        <reference name="content">
+            <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="lesite_brand/adminhtml_brand" name="brand" />
+        </reference>
+    </adminhtml_brand_index>
+
+    <adminhtml_brand_grid>
+        <block type="lesite_brand/adminhtml_brand_grid" name="root"/>
+    </adminhtml_brand_grid>
+
+    <adminhtml_brand_new>
+        <update handle="adminhtml_brand_edit" />
+    </adminhtml_brand_new>
+
+    <adminhtml_brand_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="lesite_brand/adminhtml_brand_edit" name="brand_edit" />
+        </reference>
+        <reference name="left">
+            <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="lesite_brand/adminhtml_brand_edit_tabs" name="brand_edit_tabs">
+                <block type="lesite_brand/adminhtml_brand_edit_tab_form" name="brand_edit_tab_form" />
+                <action method="addTab"><name>form_section</name><block>brand_edit_tab_form</block></action>
+            </block>
+        </reference>
+    </adminhtml_brand_edit>
+    
+</layout>

@@ -1,0 +1,140 @@
+<?php 
+
+$brands = $this->getAllBrands();
+$collection_size = count($brands);
+
+$brandsCurrentPage = $this->getBrandsCollection();
+
+$base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+$media_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+$url = $this->helper('core/url')->getCurrentUrl();
+$get_params = strstr($url, '?');
+
+
+?>
+<?php $brand_filter = Mage::registry('brand_filter'); ?>
+<?php echo $this->getChildHtml('product_list'); ?>
+
+
+<h3><?php echo $this->__('Browse') ?></h3>
+<p class="brandsAlphabetOptions">
+    <?php if (isset($brand_filter)):?>
+        <b><a href="<?php echo "${base_url}brand/index/index";?>">All</a> </b>
+    <?php else:?>
+        <b>All </b>
+    <?php endif;?>
+    <?php foreach (range('A', 'Z') as $alpha):?>
+        <?php if (isset($brand_filter) && !strcasecmp($alpha, $brand_filter)): ?>
+            <b><?php echo $alpha;?> </b>
+        <?php else:?>
+            <b><a href="<?php echo "${base_url}brand/index/index/filter/$alpha";?>" class="selected"><?php echo $alpha;?></a> </b>
+        <?php endif;?>
+    <?php endforeach;?>
+</p>
+<br/>
+
+<?php if(count($this->getFeaturedBrands())):?>
+    <h3><?php echo $this->__('Featured Brands') ?></h3>
+
+      <ul class="brandsFeatured">
+      <?php foreach($this->getFeaturedBrands() as $brand):  ?>
+      <?php $t_img =  Mage::helper('lesite_brand')->getUrlLogoPath($brand->getId()) .'/'. $brand->getLogo();?>
+          <li><a href="<?php echo $base_url . $brand->getUrlKey();?>">
+
+            <img src="<?php echo $t_img;?>" /></a>
+          </li>
+      <?php endforeach;?>
+      </ul>
+
+<?php endif;?>
+<br/>
+
+<h3><?php echo $this->__('All Brands') ?></h3>
+
+<?php if(!sizeof($brandsCurrentPage)): ?>
+    <p class="note-msg"><?php echo $this->__('There are no brands matching the selection.') ?></p>
+<?php else: ?>
+    
+    
+    <div class="brandsList">
+    <?php 
+        $limit = $this->getPaginationLimit();
+
+        $cur_page = $this->getRequest()->getParam('page', 1);
+        $cur_page = preg_match('/^\d+$/', $cur_page) ? $cur_page : 1;
+
+        $pages_num = ceil($collection_size / $limit);
+    ?>
+
+    <?php if ($pages_num > 1): ?>
+        <?php if ($cur_page > 1): ?>
+            <?php $prev_page = $cur_page - 1;?>
+            <a href="<?php echo $base_url . 'brand/index/index/page/' . $prev_page . $get_params;?>"><b>Previous</b></a>
+        <?php endif; ?>
+        <?php for ($i = 1; $i <= $pages_num; ++$i): ?>
+            <?php if ($i == $cur_page): ?>
+                <b><?php echo $i; ?></b>
+            <?php else: ?>
+                <a href="<?php echo $base_url . 'brand/index/index/page/' . $i . $get_params; ?>"><b><?php echo $i;?></b></a>
+            <?php endif;?>
+        <?php endfor; ?>
+        <?php if ($cur_page < $pages_num): ?>
+            <?php $next_page = $cur_page + 1;?>
+            <a href="<?php echo $base_url . 'brand/index/index/page/' . $next_page . $get_params;?>"><b>Next</b></a>
+        <?php endif; ?>
+    <?php endif;?>
+    </div>
+    <div>
+       
+        <?php $_collectionSize = sizeof($brandsCurrentPage); ?>
+        <?php $_columnCount = $this->getColumnCount(); ?>
+        <?php $i = 0; ?>
+        <?php foreach ($brandsCurrentPage as $current_brand): ?>
+            <?php
+                $brand = $current_brand['brand'];
+                $detail_url = $base_url . $brand->getUrlKey();
+            ?>
+            <?php if ($i++ % $_columnCount == 0): ?>
+            <ul>
+            <?php endif ?>
+                <li>
+                    
+                    <div>
+                        <?php if (strlen($brand->getLogo())): ?>
+                        <a 
+                            href="<?php echo $detail_url; ?>" 
+                            title="<?php echo $brand->getTitle(); ?>">
+                            <?php $img =  Mage::helper('lesite_brand')->getUrlLogoPath($brand->getId()) .'/'. $brand->getLogo();?>
+                            <img src="<?php echo $img;?>" 
+                                 alt="<?php echo $brand->getTitle();?>" />
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                     
+                    <h2>
+                        <a 
+                            href="<?php echo $detail_url;?>" 
+                            title="<?php echo $brand->getTitle();?>">
+                                <?php $brand->getTitle();?>
+                        <?php echo $brand->getTitle();?>
+                        </a>
+                    </h2>
+                    <div>
+                        <?php if ($current_brand['products'] > 0): ?>
+                        <a href="<?php echo $detail_url;?>" title="<?php echo $brand->getTitle(); ?>">
+                            <?php echo $this->__('View Products') ?>
+                        </a>
+                        <?php echo " ({$current_brand['products']})"; ?>
+                        <?php else:?>
+                        <span>No associated products</span>
+                        <?php endif;?>
+                    </div>
+                    
+                </li>
+            <?php if ($i % $_columnCount == 0 || $i == $_collectionSize): ?>
+            </ul>
+            <?php endif ?>
+            <?php endforeach ?>
+
+    </div>
+<?php endif; ?>

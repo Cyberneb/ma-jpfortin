@@ -1,0 +1,9 @@
+<?php
+    $brand = $this->getBrand();
+    
+    $logo =  Mage::helper('lesite_brand')->getUrlLogoPath($brand->getId()) .'/'. $brand->getLogo();
+    $banner =  Mage::helper('lesite_brand')->getUrlBannerPath($brand->getId()) .'/'. $brand->getBanner();
+?>
+<?php
+    $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK) . 'brands';
+?>

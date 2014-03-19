@@ -1,0 +1,20 @@
+<?php 
+    $brand = $this->getBrand();
+    if($brand->getId()):
+?>
+<a href="<?php echo $this->getUrl($brand->getUrlKey());?>">
+    <?php
+        if($brand->getLogo())
+		{
+            $path = 'brand' . DS . 'thumbnail'.DS.$brand->getId();
+            $imgSrc =  Mage::helper('lesite_brand')->getUrlLogoPath($brand->getId()) .'/'. $brand->getLogo();
+            ?>
+                <img src="<?php echo $imgSrc;?>" title="<?php echo $brand->getTitle();?>"/>
+            <?php
+		}
+    ?>
+    <p>
+        <?php echo $brand->getTitle();?>
+    </p>
+</a>
+<?php endif; ?>
