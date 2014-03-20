@@ -127,7 +127,7 @@ class Lesite_Brand_Model_Brand extends Mage_Core_Model_Abstract {
     
     
     public function updateUrlKey() {
-        echo $id = $this->getId();
+        $id = $this->getId();
         $url_key = $this->getData('url_key');
 
         try {
