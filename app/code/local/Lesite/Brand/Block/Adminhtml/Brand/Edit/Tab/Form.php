@@ -225,13 +225,13 @@ class Lesite_Brand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Adminhtml_Bl
         if(isset($data['logo']) && $data['logo'])
         {
             $data['old_logo'] =  $data['logo'];
-            $data['logo'] =  Mage::helper('lesite_brand')->getUrlLogoPath($data['id']) .'/'. $data['logo'];
+            $data['logo'] =  Mage::helper('lesite_brand')->getUrlLogoPath($this->getRequest()->getParam('id')) .'/'. $data['logo'];
         }
         
         if(isset($data['banner']) && $data['banner'])
         {
             $data['old_banner'] =  $data['banner'];
-            $data['banner'] =  Mage::helper('lesite_brand')->getUrlBannerPath($data['id']) .'/'. $data['banner'];
+            $data['banner'] =  Mage::helper('lesite_brand')->getUrlBannerPath($this->getRequest()->getParam('id')) .'/'. $data['banner'];
         }
         
         $form->setValues($data);
