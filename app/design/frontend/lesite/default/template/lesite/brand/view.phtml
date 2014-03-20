@@ -8,23 +8,5 @@
     $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK) . 'brand/';
 ?>
 <p>
-    <?php if (strlen($brand->getBanner())): ?>
-        <p class="brandBanner">
-            <img src="<?php echo $banner ?>" />
-        </p>
-    <?php endif; ?>
-        
-    <h1><?php echo $brand->getTitle()?></h1>
-    
-    <?php echo $brand->getDescription(); ?>
-        
-    <?php if (($brand->getType()) == 3 || ($brand->getType()) == 1): ?>
-        <a href="<?php echo $base_url.'index/nav/id/'.$brand->getId().'/?cat=3'; ?>">Shop Women</a>
-    <?php endif; ?>
-        
-    <?php if (($brand->getType()) == 3 || ($brand->getType()) == 2): ?>
-        <a href="<?php echo $base_url.'index/nav/id/'.$brand->getId().'/?cat=4'; ?>">Shop Men</a>
-    <?php endif; ?>
-        
     <p><?php echo $brand->getLandingPageContent(); ?></p>
 </p>

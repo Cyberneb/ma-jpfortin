@@ -45,9 +45,6 @@
             </action>
         </reference>
         <reference name="right">
-            <block type="lesite_brand/view" before="-" name="viewsidebar" template="lesite/brand/view-sidebar.phtml">
-                <block type="lesite_brand/layer_view" name="brand-leftnav" before="search_result_list" template="catalog/layer/view.phtml"/>
-            </block>
             <remove name="right.poll"/>
             <remove name="cart_sidebar"/>
             <remove name="catalog.compare.sidebar"/>
@@ -56,11 +53,6 @@
             <remove name="right.permanent.callout" /><remove name="right.permanent.callout" />
             <remove name="left.permanent.callout" />
             <remove name="left.newsletter" />
-        </reference>
-        <reference name="head">
-            <action method="setTitle" translate="title">
-                <title>Brands Products</title>
-            </action>
         </reference>
         <reference name="content">
             <block type="lesite_brand/view" name="brandView" template="lesite/brand/view.phtml" />
