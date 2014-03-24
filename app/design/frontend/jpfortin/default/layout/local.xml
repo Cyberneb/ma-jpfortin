@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <default>
+        <reference name="scripts">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/newsletter/subscribe.js</name>
+            </action>
+        </reference>
+        <reference name="after_body_start">
+            <block type="newsletter/subscribe" name="newsletter.popup" template="newsletter/popup.phtml"/>
+        </reference>
+    </default>
+</layout>
