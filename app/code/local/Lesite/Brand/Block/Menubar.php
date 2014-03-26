@@ -14,7 +14,9 @@ class Lesite_Brand_Block_Menubar extends Mage_Core_Block_Template {
         $featured = $model->getActiveCollection()
                             ->addFieldToFilter('featured', '1')
                             ->setStoreId($storeId)
-                            ->addOrder('title', 'ASC');
+                            ->addOrder('title', 'ASC')
+                            ->setPageSize(10)
+                            ->setCurPage(1);
         return($featured);
     }
     

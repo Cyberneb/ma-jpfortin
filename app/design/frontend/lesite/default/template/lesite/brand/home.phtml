@@ -7,17 +7,16 @@ $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
 <?php $brand_filter = Mage::registry('brand_filter'); ?>
 
 
-    <h3><?php echo $this->__('Brands') ?></h3>
+    <h3><?php echo $this->__('XXX BRANDS OF JP FORTIN') ?></h3>
 
-      <ul class="MenuFeaturedBrands">
+      <ul class="homeFeaturedBrands">
       <?php foreach($featuredBrands as $brand): ?>
       <?php $t_img =  Mage::helper('lesite_brand')->getUrlLogoPath($brand->getId()) .'/'. $brand->getLogo();?>
           <li>
               <a href="<?php echo $base_url . $brand->getUrlKey();?>"><img src="<?php echo $t_img;?>" /> </a>
           </li>
       <?php endforeach;?>
-          <li><a href="<?php echo $base_url.'brand/index/index/type/women'?>"><?php echo $this->__('SHOP ALL WOMEN&rsquo;S BRANDS') ?></a></li>
-          <li><a href="<?php echo $base_url.'brand/index/index/type/men'?>"><?php echo $this->__('SHOP ALL MEN&rsquo;S BRANDS') ?></a></li>
       </ul>
+    <div><a href="<?php echo $base_url.'brand'?>"><?php echo $this->__('ALL BRANDS') ?></a></div>
     
 
