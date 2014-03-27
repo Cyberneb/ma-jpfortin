@@ -77,17 +77,17 @@
                     <?php 
                     // Retrieving Brand Name
                     $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
-                    echo $attr = $_product->getResource()->getAttribute($attributeCode);
+                    $attr = $_product->getResource()->getAttribute($attributeCode);
+
                     if ($attr->usesSource()):
-                        $brand_id = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
+                        $brandId = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
                     endif;
-                    if($brand_id):
-                        $brand = Mage::getSingleton('brand/brand')->load($brand_id);
+                    if($brandId):
                     ?>
-                        <div class="productListBrand">
-                                <?php echo $brand->getTitle();?>
-                        </div>
-                    <?php endif; ?>
+                    <div class="productListBrandLogo">
+                        <?php echo Mage::helper('lesite_brand/brand')->getBrandTitle($brandId);?>
+                    </div>
+                    <?php endif;?>
                 </div>
             </div>
         </li>
@@ -128,17 +128,17 @@
                     <?php 
                     // Retrieving Brand Name
                     $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
-                    echo $attr = $_product->getResource()->getAttribute($attributeCode);
+                    $attr = $_product->getResource()->getAttribute($attributeCode);
+
                     if ($attr->usesSource()):
-                        $brand_id = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
+                        $brandId = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
                     endif;
-                    if($brand_id):
-                        $brand = Mage::getSingleton('brand/brand')->load($brand_id);
+                    if($brandId):
                     ?>
-                        <div class="productListBrand">
-                                <?php echo $brand->getTitle();?>
-                        </div>
-                    <?php endif; ?>
+                    <div class="productListBrandLogo">
+                        <?php echo Mage::helper('lesite_brand/brand')->getBrandTitle($brandId);?>
+                    </div>
+                    <?php endif;?>
                 </div>
             </li>
         <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
