@@ -120,9 +120,4 @@
             </block>
         </reference>
     </brand_index_nav>
-    <catalog_product_view>
-        <reference name="alert.urls">
-            <block type="lesite_brand/productpage" name="brand_productpage" template="lesite/brand/productpage.phtml"/>
-        </reference>
-    </catalog_product_view>
 </layout>
