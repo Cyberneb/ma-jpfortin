@@ -101,7 +101,7 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
     }
     
     /**
-     * Retrive add to wishlist url
+     * Retrive brand Title
      *
      * @param brand_id, int
      * @return string
