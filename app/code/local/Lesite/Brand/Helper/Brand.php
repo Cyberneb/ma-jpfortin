@@ -99,5 +99,18 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
             }
         }
     }
+    
+    /**
+     * Retrive add to wishlist url
+     *
+     * @param brand_id, int
+     * @return string
+     */
+    public function getBrandTitle($brandId)
+    {
+        $brand = Mage::getSingleton('brand/brand')->load($brandId);
+        
+        return $brand->getTitle();
+    }
 
 }
