@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Lesite_Newsletter>
+            <version>0.1.0</version>
+        </Lesite_Newsletter>
+    </modules>
+    <frontend>
+        <routers>
+            <newsletter>
+                <args>
+                    <modules>
+                        <lesite_newsletter before="Mage_Newsletter">Lesite_Newsletter</lesite_newsletter>
+                    </modules>
+                </args>
+            </newsletter>
+        </routers>
+    </frontend>
+    <default>
+        <newsletter>
+            <popup>
+                <title><![CDATA[Stay in touch & get 10% off]]></title>
+                <submit_text>Submit</submit_text>
+            </popup>
+        </newsletter>
+    </default>
+</config>

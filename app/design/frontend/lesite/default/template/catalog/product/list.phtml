@@ -74,6 +74,20 @@
                             <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
                         <?php endif; ?>
                     </ul>
+                    <?php 
+                    // Retrieving Brand Name
+                    $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
+                    $attr = $_product->getResource()->getAttribute($attributeCode);
+
+                    if ($attr->usesSource()):
+                        $brandId = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
+                    endif;
+                    if($brandId):
+                    ?>
+                    <div class="productListBrandLogo">
+                        <?php echo Mage::helper('lesite_brand/brand')->getBrandTitle($brandId);?>
+                    </div>
+                    <?php endif;?>
                 </div>
             </div>
         </li>
@@ -111,6 +125,20 @@
                             <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
                         <?php endif; ?>
                     </ul>
+                    <?php 
+                    // Retrieving Brand Name
+                    $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
+                    $attr = $_product->getResource()->getAttribute($attributeCode);
+
+                    if ($attr->usesSource()):
+                        $brandId = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
+                    endif;
+                    if($brandId):
+                    ?>
+                    <div class="productListBrandLogo">
+                        <?php echo Mage::helper('lesite_brand/brand')->getBrandTitle($brandId);?>
+                    </div>
+                    <?php endif;?>
                 </div>
             </li>
         <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
