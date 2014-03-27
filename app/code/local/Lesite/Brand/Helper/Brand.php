@@ -112,5 +112,18 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
         
         return $brand->getTitle();
     }
+    
+    /**
+     * Retrive Brand Description
+     *
+     * @param brand_id, int
+     * @return string
+     */
+    public function getBrandDescription($brandId)
+    {
+        $brand = Mage::getSingleton('brand/brand')->load($brandId);
+        
+        return $brand->getDescription();
+    }
 
 }

@@ -49,6 +49,20 @@ jsQueue.push(function(){
         </div>
 
         <div class="product-shop">
+            <?php 
+            // Retrieving Brand Name
+            $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
+            $attr = $_product->getResource()->getAttribute($attributeCode);
+
+            if ($attr->usesSource()):
+                $brandId = $attr->getSource()->getOptionId($_product->getAttributeText($attributeCode));
+            endif;
+            if($brandId):
+            ?>
+            <div class="productPageBrand">
+                <?php echo Mage::helper('lesite_brand/brand')->getBrandTitle($brandId);?>
+            </div>
+            <?php endif;?>
             <div class="product-name">
                 <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
             </div>
@@ -156,7 +170,14 @@ jsQueue.push(function(){
     });
     </script>
     </div>
-
+    <?php 
+    if($brandId):
+    ?>
+    <h2><?php echo $this->__('About The Brand') ?></h2>
+    <div class="productPageBrand">
+        <?php echo Mage::helper('lesite_brand/brand')->getBrandDescription($brandId);?>
+    </div>
+    <?php endif;?>
     <div class="product-collateral">
 <?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
         <div class="box-collateral <?php echo "box-{$alias}"?>">
