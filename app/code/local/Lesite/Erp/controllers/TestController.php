@@ -26,7 +26,7 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
         // go through order ids until null
         $order_id = '100000001-1';
         $order_sync = Mage::getModel('lesite_erp/orderSync');
-        $order_sync->getOrderInfo();
+        $order_sync->syncOrders();
     }
     
 }

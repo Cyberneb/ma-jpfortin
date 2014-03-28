@@ -24,7 +24,7 @@ $installer->run("
 
     CREATE TABLE `erp_order_sync` (
     `order_id` varchar(20) NOT NULL,
-     `last_accessed` datetime DEFAULT NULL,
+    `created_at` datetime DEFAULT NULL,
     `last_updated` datetime DEFAULT NULL,
     `data` longtext,
     PRIMARY KEY (`order_id`)
