@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+FAQ Module by Lesite
+Each line should be prefixed with 
+-->
+
+
+<layout>
+    <adminhtml_faq_index>
+        <reference name="content">
+            <block type="lesite_faq/adminhtml_item" name="item" />
+        </reference>
+    </adminhtml_faq_index>
+
+    <adminhtml_faq_grid>
+        <block type="lesite_faq/adminhtml_item_grid" name="root"/>
+    </adminhtml_faq_grid>
+
+    <adminhtml_faq_new>
+        <update handle="adminhtml_faq_edit" />
+    </adminhtml_faq_new>
+
+    <adminhtml_faq_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="lesite_faq/adminhtml_item_edit" name="item_edit" />
+        </reference>
+        <reference name="left">
+            <block type="lesite_faq/adminhtml_item_edit_tabs" name="item_edit_tabs">
+                <block type="lesite_faq/adminhtml_item_edit_tab_main" name="item_edit_tab_main" />
+                <action method="addTab"><name>main_section</name><block>item_edit_tab_main</block></action>
+            </block>
+        </reference>
+    </adminhtml_faq_edit>
+    
+    <adminhtml_faq_category_index>
+        <reference name="content">
+            <block type="lesite_faq/adminhtml_category" name="caetegory" />
+        </reference>
+    </adminhtml_faq_category_index>
+    
+    <adminhtml_faq_category_grid>
+        <block type="lesite_faq/adminhtml_category_grid" name="root"/>
+    </adminhtml_faq_category_grid>
+
+    <adminhtml_faq_category_new>
+        <update handle="adminhtml_faq_category_edit" />
+    </adminhtml_faq_category_new>
+
+    <adminhtml_faq_category_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="lesite_faq/adminhtml_category_edit" name="category_edit" />
+        </reference>
+        <reference name="left">
+            <block type="lesite_faq/adminhtml_category_edit_tabs" name="category_category_tabs">
+                <block type="lesite_faq/adminhtml_category_edit_tab_main" name="category_edit_tab_main" />
+                <action method="addTab"><name>main_section</name><block>category_edit_tab_main</block></action>
+            </block>
+        </reference>
+    </adminhtml_faq_category_edit>
+    
+</layout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+FAQ by Lesite
+Each line should be prefixed with 
+-->
+
+
+<layout version="0.1.0">
+    <default>
+        
+    </default>
+    <lesite_faq_index_index translate="label"> 
+        <label>Faq List</label>
+        ￼
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/default.phtml</template> 
+            </action>
+            <action method="setHeaderTitle" translate="title" module="lesite_faq">
+                <title>FAQ</title>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_faq/list" name="faq.list" template="lesite/faq/list.phtml">
+                <block type="page/html_pager" name="faq.list.pager" as="faq_list_pager" />
+            </block>
+        </reference>
+        <reference name="right">
+            <remove name="right.poll"/>
+            <remove name="cart_sidebar"/>
+            <remove name="catalog.compare.sidebar"/>
+            <remove name="right.reports.product.viewed"/>
+            <remove name="catalog.leftnav"/>
+            <remove name="right.permanent.callout" /><remove name="right.permanent.callout" />
+            <remove name="left.permanent.callout" />
+            <remove name="left.newsletter" />
+        </reference>
+    </lesite_faq_index_index>
+</layout>

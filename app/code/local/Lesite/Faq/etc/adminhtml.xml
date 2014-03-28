@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Brand Module by Lesite
+Each line should be prefixed with 
+-->
+
+<config>
+    <menu>
+        <cms>
+            <children>
+                <faq translate="title" module="lesite_faq"> 
+                    <title>FAQ</title>
+                    <sort_order>65</sort_order>
+                    <children>
+                        <item translate="title" module="lesite_faq">
+                            <title>FAQs</title> 
+                            <action>adminhtml/faq</action> 
+                            <sort_order>50</sort_order>
+                        </item>
+                        <category translate="title" module="lesite_faq">
+                            <title>Categories</title> 
+                            <action>adminhtml/faq_category</action> 
+                            <sort_order>51</sort_order>
+                        </category>
+                    </children>
+                </faq>
+            </children>
+        </cms>        
+    </menu>
+    <acl>
+        <resources> 
+            <admin>
+                <cms>
+                    <children>
+                        <faq translate="title" module="lesite_faq"> 
+                            <title>FAQ</title>
+                            <sort_order>65</sort_order>
+                            <children>
+                                <item translate="title" module="lesite_faq">
+                                    <title>FAQ Items</title>
+                                    <sort_order>65</sort_order>
+                                    <children>
+                                        <manage translate="title">
+                                            <title>Manage FAQ Items</title>
+                                            <sort_order>0</sort_order>
+                                            <children>
+                                                <save translate="title">
+                                                    <title>Save FAQ Item</title>
+                                                    <sort_order>0</sort_order>
+                                                </save>
+                                                <delete translate="title">
+                                                    <title>Delete FAQ Item</title>
+                                                    <sort_order>10</sort_order>
+                                                </delete>
+                                            </children>
+                                        </manage>
+                                    </children>
+                                </item>
+                                <category translate="title" module="lesite_faq">
+                                    <title>FAQ Categories</title>
+                                    <sort_order>65</sort_order>
+                                    <children>
+                                        <manage translate="title">
+                                            <title>Manage FAQ Categories</title>
+                                            <sort_order>0</sort_order>
+                                            <children>
+                                                <save translate="title">
+                                                    <title>Save FAQ Category</title>
+                                                    <sort_order>0</sort_order>
+                                                </save>
+                                                <delete translate="title">
+                                                    <title>Delete FAQ Category</title>
+                                                    <sort_order>10</sort_order>
+                                                </delete>
+                                            </children>
+                                        </manage>
+                                    </children>
+                                </category>
+                            </children>
+                        </faq>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <faq translate="title" module="lesite_faq">
+                                            <title>Faq Management</title>
+                                        </faq>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </cms>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+FAQ by Lesite
+Each line should be prefixed with 
+-->
+
+
+<config>
+    <modules>
+        <Lesite_Faq>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Adminhtml />
+            </depends>
+        </Lesite_Faq>
+    </modules>
+</config>

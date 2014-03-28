@@ -1,0 +1,31 @@
+<?php
+/*
+ * FAQ by Lesite
+ * Each line should be prefixed with  * 
+ */
+
+/**
+ * @var $this Lesite_Faq_Block_List
+ * @see Lesite_Faq_Block_List
+ */
+?>
+<div id="faq_list_messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+
+<?php foreach ($this->getCategoryCollection() as $category) : ?>
+    <?php $catQues = $this->getItemCollectionByCategory($category); ?>
+    <?php if (count($catQues) > 0): ?>
+        <h2><?php echo $this->htmlEscape($category->getTitle()); ?></h2>
+
+        <ul>
+            <?php foreach ($catQues as $faqItem): ?>
+            <li id="item_<?php echo $faqItem->getId() ?>">
+                    <h3><a href="#"><?php echo $this->escapeHtml($faqItem->getQuestion()) ?></a></h3>
+                    <div id="answer_<?php echo $faqItem->getId() ?>">
+                        <?php echo $faqItem->getAnswer(); ?>
+                    </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+<?php endforeach; ?>
+<?php //echo $this->getPager() ?>
