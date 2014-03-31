@@ -14,10 +14,10 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
             return false;
         }
         $allProductsUpdated = $product_sync->updateAll();
-        /*while ( !$allProductsUpdated )
+        while ( !$allProductsUpdated )
         {
             $allProductsUpdated = $product_sync->updateAll();
-        }*/
+        }
         echo 'Done';
     }
     

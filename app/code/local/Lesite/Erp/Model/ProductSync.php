@@ -23,25 +23,39 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         $last_accessed = Mage::getResourceModel('lesite_erp/productSync')->getLastAccessed();
         while( !empty($last_accessed) && time() < $a_minute_ago )
         {
-            echo 'Updating product ' . $last_accessed[0]['sku'] . '<br>';
-            // compare data
-            // if different, update
-            die();
+            if( Mage::getResourceModel('lesite_erp/productSync')
+                ->updateSku($last_accessed[0]['sku']) )
+            {
+                $this->saveProduct( $last_accessed );
+                $last_accessed = Mage::getResourceModel('lesite_erp/productSync')
+                    ->getLastAccessed();
+                continue;
+            }
+            if( Mage::getResourceModel('lesite_erp/productSync')
+                ->updateInventory($last_accessed[0]['sku']) )
+            {
+                $simpleProduct = Mage::getModel("catalog/product")
+                    ->loadByAttribute('sku',$product_data['SKU_SKUID']);
+            }
             sleep(1);
             $last_accessed = Mage::getResourceModel('lesite_erp/productSync')->getLastAccessed();
         }
         $daily_update = Mage::getResourceModel('lesite_erp/productSync')->getDailyUpdate();
         while( !empty($daily_update) && time() < $a_minute_ago  )
         {
-            echo 'Updating product ' . $daily_update['sku'] . '<br>';      
+            if( Mage::getResourceModel('lesite_erp/productSync')
+                ->updateSku($daily_update[0]['sku']) )
+            {
+                $this->saveProduct( $daily_update );
+            }
             sleep(1);
             $daily_update = Mage::getResourceModel('lesite_erp/productSync')->getDailyUpdate();
         }
-        if( time() < $a_minute_ago )
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')->getNewProducts();
+        while( !empty($product_data) && time() < $a_minute_ago )
         {
-            Mage::getResourceModel('lesite_erp/productSync')->getNewProducts();
-        }
-        
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')->getNewProducts();
+        }      
         $product_data = Mage::getResourceModel('lesite_erp/productSync')->addNewProduct();
         while( !empty($product_data) && time() < $a_minute_ago )
         {   
@@ -50,6 +64,7 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         }
         if( time() < $a_minute_ago )
         {
+            Mage::getSingleton("core/session")->setSmallestSku(0);
             return true;
         }
         return false;

@@ -20,7 +20,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $readConnection = $resource->getConnection('core_read');
         $table = $resource->getTableName('lesite_erp/product_sync');
         $query = 'SELECT * FROM ' . $table . ' WHERE last_accessed > last_updated '
-               . 'ORDER BY last_accessed DESC LIMIT 1';
+               . 'ORDER BY last_accessed DESC LIMIT 0, 1';
         $result = $readConnection->fetchAll($query);
         return $result;
     }
@@ -31,15 +31,20 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $readConnection = $resource->getConnection('core_read');
         $today = date('Y-m-d');
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'SELECT * FROM ' . $table . ' WHERE last_updated IS NOT NULL '
-               . '&& last_updated < ' . $today . ' ORDER BY last_updated DESC LIMIT 1';
+        $query = "SELECT * FROM " . $table . " WHERE last_updated IS NOT NULL "
+               . "AND last_updated < '" . $today . "' ORDER BY last_updated DESC LIMIT 0, 1";
         $result = $readConnection->fetchAll($query);
         return $result;
     }
     
     public function getNewProducts()
     {
-        // use registry to get products by 100
+        $smallest_sku = Mage::getSingleton("core/session")->getSmallestSku();
+        if ( empty($smallest_sku) )
+        {
+            $smallest_sku = 0;
+            Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
+        }
         $result = array();
         try 
         {
@@ -47,14 +52,17 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
-            $sql = 'SELECT SKU_SKUID FROM ChainDrive_inventory'; 
-            $rs = $db->Execute($sql); 
+            $sql = 'SELECT SKU_SKUID FROM ChainDrive_inventory '
+                 . 'WHERE SKU_SKUID > ? ORDER BY SKU_SKUID ASC ROWS 20'; 
+            $rs = $db->Execute( $sql, array( $smallest_sku ) ); 
             if ($rs)
             {
 	         while ($row = $rs->FetchRow())
                  {
-	             $result[] = $row; 
-	         }
+	             $result[] = $row;
+                     $smallest_sku = $row['SKU_SKUID'];
+ 	         }
+                 Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
             }
         }   
         catch (Exception $e)
@@ -70,6 +78,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $binds = array( 'sku' => $value['SKU_SKUID'] );
             $writeConnection->query($query, $binds);
         }
+        return $result;
     }
     
     public function addNewProduct()
@@ -80,28 +89,83 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $table = $resource->getTableName('lesite_erp/product_sync');
         $query = 'SELECT sku FROM ' . $table . ' WHERE last_updated IS NULL LIMIT 1';
         $result = $readConnection->fetchAll($query);
-         $sku = $result[0]['sku'];
+        $sku = $result[0]['sku'];
         
         if ( empty($sku) ) return false;
         $result = $this->getProductInfo( $sku );
+        $this->syncProduct( $result );
+        return $result;
+    }
+    
+    public function syncProduct( $product_info )
+    {
+        $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/product_sync');
         $query = 'UPDATE ' . $table . ' SET configurable = :configurable, '
                . 'last_accessed = :last_accessed, '
                . 'last_updated = :last_updated, data = :data WHERE sku = :sku';
         $now = date('Y-m-d H:i:s');
-        $data = serialize($result);
+        $data = serialize($product_info);
         $binds = array(
-            'configurable' => $result['INV_PRODUCTCODE'],
+            'configurable' => $product_info['INV_PRODUCTCODE'],
             'last_accessed' => $now,
             'last_updated' => $now,
-            'data' => $data,
-            'sku' => $result['SKU_SKUID']
+            'data' => utf8_encode($data),
+            'sku' => $product_info['SKU_SKUID']
         );
-        $writeConnection->query($query, $binds);
-        return $result;
-    }
+        try {
+            $result = $writeConnection->query($query, $binds);
+        } catch ( Exception $e ) {
+            print_r( $e );
+        }
+     }
     
+    public function updateInventory( $sku )
+    {
+        $chainDriveInfo = $this->getInventoryInfo( $sku );
+        print_r($chainDriveInfo);
+        die();
+        $magentoInfo = $this->getSyncInfo( $sku );
+        if ( $chainDriveInfo !== $magentoInfo )
+        {
+            $this->syncProduct( $chainDriveInfo );
+            return true;
+        }
+        return false;
+     }
+    
+    public function updateSku( $sku )
+    {
+        $chainDriveInfo = $this->getProductInfo( $sku );
+        $magentoInfo = $this->getSyncInfo( $sku );
+        if ( $chainDriveInfo !== $magentoInfo )
+        {
+            $this->syncProduct( $chainDriveInfo );
+            return true;
+        }
+        return false;
+    }
+
+    public function getSyncInfo( $sku )
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $table = $resource->getTableName('lesite_erp/product_sync');
+         try
+        {
+            $query = "SELECT * FROM " . $table . " WHERE sku = :sku";
+            $binds = array(
+                'sku' => $sku
+            );
+            $result = $readConnection->fetchAll($query,$binds);
+            $product_info = unserialize(utf8_decode($result[0]['data']));
+         } catch ( Exception $e ) {
+            print_r( $e );
+        }
+        return $product_info;
+    }
+
     public function getProductInfo( $sku )
     {
         try 
@@ -137,12 +201,14 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         {
             $db = &ADONewConnection('firebird');
             //$conn->debug = true;
-            $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
+            $db->Connect('70.25.42.201','WEBADM','WEBADM',
+                'C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
-            $statement = "SELECT * FROM ChainDrive_Inventory_by_Store WHERE SKU_BRANCHID = ? SKU_SKUID = ?";
+            $statement = "SELECT * FROM ChainDrive_Inventory_by_Store "
+                       . "WHERE SKU_BRANCHID = ? AND SKU_SKUID = ?";
             $result = array();
             $params = array();
-            $params[] = 'WE';
+            $params[] = '04'; //WE';
             $params[] = $sku;
             $sql = $db->Prepare($statement);
             $rs = $db->Execute($sql,$params); 
@@ -150,7 +216,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             {
 	         while ($row = $rs->FetchRow())
                  {
-	             $result['qty'] = $row['SKU_AVAILABLE'] + 0; 
+	             $result['qty'] = $row['SKU_AVAILABLE'] + 10; 
 	         }
             }
         }   
