@@ -11,7 +11,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $table = $resource->getTableName('lesite_erp/product_sync');
         $query = 'SELECT MAX( last_updated ) AS last_update FROM ' . $table;
         $result = $readConnection->fetchAll($query);
-        return $result;
+        return $result[0]['last_update'];
     }
     
     public function getLastAccessed()
@@ -48,7 +48,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $result = array();
         try 
         {
-            $db = &ADONewConnection('firebird');
+            $db = ADONewConnection('firebird');
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -67,7 +67,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         }   
         catch (Exception $e)
         {
-            echo $e->getMessage();
+            Mage::log('Could not getNewProducts: sku missing');
         }
         $resource = Mage::getSingleton('core/resource');
         foreach( $result as $value )
@@ -87,9 +87,9 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $readConnection = $resource->getConnection('core_read');
         $today = date('Y-m-d');
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'SELECT sku FROM ' . $table . ' WHERE last_updated IS NULL LIMIT 1';
+        $query = 'SELECT sku FROM ' . $table . ' WHERE last_updated IS NULL LIMIT 0, 1';
         $result = $readConnection->fetchAll($query);
-        $sku = $result[0]['sku'];
+        $sku = @$result[0]['sku'];
         
         if ( empty($sku) ) return false;
         $result = $this->getProductInfo( $sku );
@@ -99,6 +99,11 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     
     public function syncProduct( $info )
     {
+        if ( empty($info['SKU_SKUID']) )
+        {
+            Mage::log('Could not syncProduct: sku missing');
+            return false;
+        }
         $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/product_sync');
@@ -108,7 +113,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $now = date('Y-m-d H:i:s');
         $data = serialize($info);
         $binds = array(
-            'configurable' => $info['INV_PRODUCTCODE'],
+            'configurable' => @$info['INV_PRODUCTCODE'],
             'last_accessed' => $now,
             'last_updated' => $now,
             'data' => utf8_encode($data),
@@ -117,8 +122,11 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         try {
             $result = $writeConnection->query($query, $binds);
         } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not syncProduct: '.$e-getMessage());
+            sleep(1);
+            return false;
         }
+        return true;
      }
     
     public function accessProduct( $sku )
@@ -134,7 +142,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         {
             $result = $writeConnection->query($query, $binds);
         } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not accessProduct: '.$e->getMessage());
         }
      }
     
@@ -152,7 +160,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         {
             $result = $writeConnection->query($query, $binds);
         } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not updateProductSync: '.$e->getMessage());
         }
      }
     
@@ -161,19 +169,18 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/inventory_sync');
-        $query = 'REPLACE INTO ' . $table . ' ( sku, last_accessed, last_updated, '
-               . 'qty ) VALUES ( :sku, :last_accessed, :last_updated, :qty )';
+        $query = 'REPLACE INTO ' . $table . ' ( sku, last_updated, '
+               . 'qty ) VALUES ( :sku, :last_updated, :qty )';
         $now = date('Y-m-d H:i:s');
         $binds = array(
             'sku' => $info['sku'],
-            'last_accessed' => $now,
             'last_updated' => $now,
             'qty' => $info['qty']            
         );
         try {
             $result = $writeConnection->query($query, $binds);
         } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not syncInventory: '.$e->getMessage());
         }
      }
     
@@ -195,8 +202,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $magentoInfo = $this->getSyncProductInfo( $sku );       
         if ( $chainDriveInfo !== $magentoInfo )
         {
-            $this->syncProduct( $chainDriveInfo );
-            return true;
+            return $this->syncProduct( $chainDriveInfo );
         }
         else
         {
@@ -219,7 +225,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $result = $readConnection->fetchAll($query,$binds);
             $product_info = unserialize(utf8_decode($result[0]['data']));
          } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not getSyncProductInfo: '.$e->getMessage());
         }
         return $product_info;
     }
@@ -239,7 +245,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $inventory_info['qty'] = @$result[0]['qty'] + 0;
             $inventory_info['sku'] = @$result[0]['sku'];
          } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not getSyncInventoryInfo: '.$e->getMessage());
         }
         return $inventory_info;
     }
@@ -248,7 +254,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     {
         try 
         {
-            $db = &ADONewConnection('firebird');
+            $db = ADONewConnection('firebird');
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -268,7 +274,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         }   
         catch (Exception $e)
         {
-            echo $e->getMessage();
+            Mage::log('Could not getProductInfo: '.$e->getMessage());
         }
         return $result;
     }
@@ -277,7 +283,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     {
         try 
         {
-            $db = &ADONewConnection('firebird');
+            $db = ADONewConnection('firebird');
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM',
                 'C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
@@ -300,9 +306,9 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         }   
         catch (Exception $e)
         {
-            echo $e->getMessage();
+            Mage::log('Could not getInventoryInfo: '.$e->getMessage());
         }
-        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 1;
+        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 3;
 	$result['sku'] = $sku; 
         return $result;
     }
@@ -321,7 +327,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             );
             $result = $readConnection->fetchAll($query,$binds);
          } catch ( Exception $e ) {
-            print_r( $e );
+            Mage::log('Could not superAttributeExists: '.$e->getMessage());
         }
         return count($result);
     }

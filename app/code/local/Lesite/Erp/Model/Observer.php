@@ -15,7 +15,6 @@ class Lesite_Erp_Model_Observer
                 . $_SERVER['HTTP_HOST'] . "\r\nConnection: Close\r\n\r\n";
             fwrite($socket, $socketdata);
             fclose($socket);
-            Mage::log($socketdata, null, 'mylogfile.log');
         }
     }
 }

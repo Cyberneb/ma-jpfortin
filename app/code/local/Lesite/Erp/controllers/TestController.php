@@ -1,7 +1,7 @@
 <?php
 
-ignore_user_abort(true);
-set_time_limit(0);
+//ignore_user_abort(true);
+//set_time_limit(0);
 
 class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
 {
@@ -17,7 +17,6 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
         {
             $allProductsUpdated = $product_sync->updateAll();
         }
-        echo 'Done';
     }
     
     public function salesOrderAction()
