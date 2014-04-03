@@ -19,7 +19,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'SELECT * FROM ' . $table . ' WHERE last_accessed > last_updated '
+        $query = 'SELECT sku FROM ' . $table . ' WHERE last_accessed > last_updated '
                . 'ORDER BY last_accessed DESC LIMIT 0, 1';
         $result = $readConnection->fetchAll($query);
         return $result;
@@ -31,7 +31,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $readConnection = $resource->getConnection('core_read');
         $today = date('Y-m-d');
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = "SELECT * FROM " . $table . " WHERE last_updated IS NOT NULL "
+        $query = "SELECT sku FROM " . $table . " WHERE last_updated IS NOT NULL "
                . "AND last_updated < '" . $today . "' ORDER BY last_updated DESC LIMIT 0, 1";
         $result = $readConnection->fetchAll($query);
         return $result;
@@ -97,7 +97,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         return $result;
     }
     
-    public function syncProduct( $product_info )
+    public function syncProduct( $info )
     {
         $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
@@ -106,13 +106,69 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
                . 'last_accessed = :last_accessed, '
                . 'last_updated = :last_updated, data = :data WHERE sku = :sku';
         $now = date('Y-m-d H:i:s');
-        $data = serialize($product_info);
+        $data = serialize($info);
         $binds = array(
-            'configurable' => $product_info['INV_PRODUCTCODE'],
+            'configurable' => $info['INV_PRODUCTCODE'],
             'last_accessed' => $now,
             'last_updated' => $now,
             'data' => utf8_encode($data),
-            'sku' => $product_info['SKU_SKUID']
+            'sku' => $info['SKU_SKUID']
+        );
+        try {
+            $result = $writeConnection->query($query, $binds);
+        } catch ( Exception $e ) {
+            print_r( $e );
+        }
+     }
+    
+    public function accessProduct( $sku )
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');    
+        $table = $resource->getTableName('lesite_erp/product_sync');
+        $query = 'UPDATE ' . $table . ' SET last_accessed = :last_accessed '
+               . 'WHERE sku = :sku OR configurable = :configurable';
+        $now = date('Y-m-d H:i:s');
+        $binds = array( 'last_accessed' => $now, 'sku' => $sku, 'configurable' => $sku );
+        try
+        {
+            $result = $writeConnection->query($query, $binds);
+        } catch ( Exception $e ) {
+            print_r( $e );
+        }
+     }
+    
+    public function updateProductSync( $sku )
+    {
+
+       $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');    
+        $table = $resource->getTableName('lesite_erp/product_sync');
+        $query = 'UPDATE ' . $table . ' SET last_updated = :last_updated '
+               . 'WHERE sku = :sku';
+        $now = date('Y-m-d H:i:s');
+        $binds = array( 'last_updated' => $now, 'sku' => $sku );
+        try
+        {
+            $result = $writeConnection->query($query, $binds);
+        } catch ( Exception $e ) {
+            print_r( $e );
+        }
+     }
+    
+    public function syncInventory( $info )
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');    
+        $table = $resource->getTableName('lesite_erp/inventory_sync');
+        $query = 'REPLACE INTO ' . $table . ' ( sku, last_accessed, last_updated, '
+               . 'qty ) VALUES ( :sku, :last_accessed, :last_updated, :qty )';
+        $now = date('Y-m-d H:i:s');
+        $binds = array(
+            'sku' => $info['sku'],
+            'last_accessed' => $now,
+            'last_updated' => $now,
+            'qty' => $info['qty']            
         );
         try {
             $result = $writeConnection->query($query, $binds);
@@ -124,12 +180,10 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     public function updateInventory( $sku )
     {
         $chainDriveInfo = $this->getInventoryInfo( $sku );
-        print_r($chainDriveInfo);
-        die();
-        $magentoInfo = $this->getSyncInfo( $sku );
+        $magentoInfo = $this->getSyncInventoryInfo( $sku );
         if ( $chainDriveInfo !== $magentoInfo )
         {
-            $this->syncProduct( $chainDriveInfo );
+            $this->syncInventory( $chainDriveInfo );
             return true;
         }
         return false;
@@ -138,16 +192,20 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     public function updateSku( $sku )
     {
         $chainDriveInfo = $this->getProductInfo( $sku );
-        $magentoInfo = $this->getSyncInfo( $sku );
+        $magentoInfo = $this->getSyncProductInfo( $sku );       
         if ( $chainDriveInfo !== $magentoInfo )
         {
             $this->syncProduct( $chainDriveInfo );
             return true;
         }
+        else
+        {
+            $this->updateProductSync( $sku );
+        }
         return false;
     }
 
-    public function getSyncInfo( $sku )
+    public function getSyncProductInfo( $sku )
     {
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
@@ -164,6 +222,26 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             print_r( $e );
         }
         return $product_info;
+    }
+
+    public function getSyncInventoryInfo( $sku )
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $table = $resource->getTableName('lesite_erp/inventory_sync');
+         try
+        {
+            $query = "SELECT * FROM " . $table . " WHERE sku = :sku";
+            $binds = array(
+                'sku' => $sku
+            );
+            $result = $readConnection->fetchAll($query,$binds);
+            $inventory_info['qty'] = @$result[0]['qty'] + 0;
+            $inventory_info['sku'] = @$result[0]['sku'];
+         } catch ( Exception $e ) {
+            print_r( $e );
+        }
+        return $inventory_info;
     }
 
     public function getProductInfo( $sku )
@@ -208,7 +286,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
                        . "WHERE SKU_BRANCHID = ? AND SKU_SKUID = ?";
             $result = array();
             $params = array();
-            $params[] = '04'; //WE';
+            $params[] = '00'; //WE';
             $params[] = $sku;
             $sql = $db->Prepare($statement);
             $rs = $db->Execute($sql,$params); 
@@ -216,7 +294,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             {
 	         while ($row = $rs->FetchRow())
                  {
-	             $result['qty'] = $row['SKU_AVAILABLE'] + 10; 
+	             $result['qty'] = $row['SKU_AVAILABLE']; // test
 	         }
             }
         }   
@@ -224,7 +302,27 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         {
             echo $e->getMessage();
         }
-        if ( $result['qty'] < 0 ) $result['qty'] = 0;
+        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 1;
+	$result['sku'] = $sku; 
         return $result;
+    }
+    
+    public function superAttributeExists( $product_id, $attribute_id )
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        try
+        {
+            $query = "SELECT * FROM catalog_product_super_attribute WHERE "
+                   . "product_id = :product_id AND attribute_id = :attribute_id";
+            $binds = array(
+                'product_id' => $product_id,
+                'attribute_id' => $attribute_id
+            );
+            $result = $readConnection->fetchAll($query,$binds);
+         } catch ( Exception $e ) {
+            print_r( $e );
+        }
+        return count($result);
     }
 }

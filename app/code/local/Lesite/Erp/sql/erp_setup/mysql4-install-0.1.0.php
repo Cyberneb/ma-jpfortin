@@ -18,7 +18,7 @@ $installer->run("
     `sku` VARCHAR( 20 ) NOT NULL,
     `last_accessed` DATETIME DEFAULT NULL,
     `last_updated` DATETIME DEFAULT NULL,
-    `data` `qty` INT( 11 ),
+    `qty` INT( 11 ),
     PRIMARY KEY (  `sku` )
     ) ENGINE = INNODB DEFAULT CHARSET = utf8;
 

@@ -1,8 +1,7 @@
 <?php
 
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
+ignore_user_abort(true);
+set_time_limit(0);
 
 class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
 {

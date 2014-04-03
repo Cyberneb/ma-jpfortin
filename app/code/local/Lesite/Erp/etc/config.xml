@@ -18,7 +18,7 @@
                         <table>erp_product_sync</table>
                     </product_sync>
                     <inventory_sync>
-                        <table>erp_inventory_sync_sync</table>
+                        <table>erp_inventory_sync</table>
                     </inventory_sync>
                     <order_sync>
                         <table>erp_order_sync</table>
@@ -37,6 +37,16 @@
                 </connection>
             </erp_setup>    
         </resources>
+        <events>
+            <catalog_product_load_after>
+                <observers>
+                    <sync_product_viewed>
+                        <class>Lesite_Erp_Model_Observer</class>
+                        <method>syncProductViewed</method>
+                    </sync_product_viewed>
+                </observers>
+            </catalog_product_load_after>
+        </events>
     </global>
     <frontend>
         <routers>
