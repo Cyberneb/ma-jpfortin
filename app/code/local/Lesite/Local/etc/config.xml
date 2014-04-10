@@ -56,6 +56,16 @@
                 </lesite>
             </updates>
         </layout>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <lesite_local_update_layout_by_brand>
+                        <class>lesite/observer</class>
+                        <method>updateLayoutByBrand</method>
+                    </lesite_local_update_layout_by_brand>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
     </frontend>
     <admin>
         <routers>

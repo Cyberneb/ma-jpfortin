@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout version="0.1.0">
+    <default>
+        <reference name="header">
+            <block type="lesite/brand_switcher" name="brand_switcher" template="lesite/page/brand/switcher.phtml" />
+        </reference>
+    </default>
+    <default_jpfortin>
+
+    </default_jpfortin>
+    <default_lespiedssurterre>
+
+    </default_lespiedssurterre>
+</layout>

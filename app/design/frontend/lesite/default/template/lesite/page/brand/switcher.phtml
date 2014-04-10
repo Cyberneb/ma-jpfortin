@@ -1,0 +1,13 @@
+<div>
+    <ul>
+    <?php foreach ($this->getBrands() as $brandCode => $brandName): ?>
+        <li>
+        <?php if ($this->isBrandCodeCurrent($brandCode)): ?>
+            <span><?php echo $brandName ?></span>
+        <?php else: ?>
+            <a href="<?php echo $this->getSwitchUrl($brandCode) ?>"><?php echo $brandName ?></a>
+        <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>
