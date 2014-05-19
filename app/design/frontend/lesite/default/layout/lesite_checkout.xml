@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+    <checkout_cart_confirmation>
+        <update handle="page_one_column" />
+        <remove name="global_messages"/>
+        <remove name="messages"/>
+        <reference name="content">
+            <block type="checkout/cart" name="checkout.cart.confirmation" template="lesite/checkout/cart/confirmation.phtml">
+                <block type="checkout/onepage_link" name="checkout.cart.methods.onepage" as="checkout_button" template="checkout/onepage/link.phtml"/>
+                <block type="catalog/product_list_upsell" name="product.info.upsell" as="upsell_products" template="lesite/checkout/cart/upsell.phtml">
+                    <action method="setColumnCount"><columns>4</columns></action>
+                    <action method="setItemLimit"><type>upsell</type><limit>4</limit></action>
+                </block>
+            </block>
+        </reference>
+    </checkout_cart_confirmation>
+</layout>

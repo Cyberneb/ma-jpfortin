@@ -41,7 +41,7 @@ jsQueue.push(function(){
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view">
     <div class="product-essential">
-    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+    <form action="<?php echo $this->getSubmitUrl($_product, array('confirm' => 1)) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
         <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
@@ -49,7 +49,7 @@ jsQueue.push(function(){
         </div>
 
         <div class="product-shop">
-            <?php 
+            <?php
             // Retrieving Brand Name
             $attributeCode = Mage::helper('lesite_brand/brand')->getAttributeCode();
             $attr = $_product->getResource()->getAttribute($attributeCode);
@@ -170,7 +170,7 @@ jsQueue.push(function(){
     });
     </script>
     </div>
-    <?php 
+    <?php
     if($brandId):
     ?>
     <h2><?php echo $this->__('About The Brand') ?></h2>
