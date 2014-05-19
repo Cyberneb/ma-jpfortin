@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Lesite_ProductAutocategory>
+            <version>1.0.0.0</version>
+        </Lesite_ProductAutocategory>
+    </modules>
+    <global>
+        <helpers>
+            <lesite_productautocategory>
+                <class>Lesite_ProductAutocategory_Helper</class>
+            </lesite_productautocategory>
+        </helpers>
+        <models>
+            <lesite_productautocategory>
+                <class>Lesite_ProductAutocategory_Model</class>
+                <resourceModel>lesite_productautocategory_resource</resourceModel>
+            </lesite_productautocategory>
+            <lesite_productautocategory_resource>
+                <class>Lesite_ProductAutocategory_Model_Resource</class>
+            </lesite_productautocategory_resource>
+        </models>
+    </global>
+    <crontab>
+        <jobs>
+            <assign_products_to_special_categories>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>lesite_productautocategory/cron::assingProductsToSpecialCategories</model>
+                </run>
+            </assign_products_to_special_categories>
+        </jobs>
+    </crontab>
+</config>

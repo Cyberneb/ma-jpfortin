@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <catalog>
+            <groups>
+                <navigation>
+                    <fields>
+                        <category_new translate="label" module="lesite_productautocategory">
+                            <label>"New Arrivals" category</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>lesite_productautocategory/system_config_source_category</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </category_new>
+                        <category_sale translate="label" module="lesite_productautocategory">
+                            <label>"Sale" category</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>lesite_productautocategory/system_config_source_category</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </category_sale>
+                        <category_bestsellers translate="label" module="lesite_productautocategory">
+                            <label>"Best Sellers" category</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>lesite_productautocategory/system_config_source_category</source_model>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </category_bestsellers>
+                        <category_web translate="label" module="lesite_productautocategory">
+                            <label>"Web Exclusives" category</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>lesite_productautocategory/system_config_source_category</source_model>
+                            <sort_order>130</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </category_web>
+                        <bestsellers_days translate="label comment" module="lesite_productautocategory">
+                            <label>"Best Sellers" period</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Number of last days which will be as period for bestsellers product calculation. Leave empty or set 0 to get lifetime bestsellers.</comment>
+                            <sort_order>140</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bestsellers_days>
+                        <bestsellers_number translate="label comment" module="lesite_productautocategory">
+                            <label>"Best Sellers" number</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Number of calculated top sellers products which will be bestsellers. Leave empty or set 0 to don't take this setting into account.</comment>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bestsellers_number>
+                        <bestsellers_sales_number translate="label comment" module="lesite_productautocategory">
+                            <label>"Best Sellers" sales number</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Minimal sales number for product to mark it as bestsellers. Leave empty or set 0 to don't take this setting into account</comment>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bestsellers_sales_number>
+                    </fields>
+                </navigation>
+            </groups>
+        </catalog>
+    </sections>
+</config>
