@@ -11,7 +11,7 @@ class Lesite_ProductAutocategory_Model_System_Config_Source_Category
     {
         $collection = Mage::getResourceModel('catalog/category_collection');
         $collection->addAttributeToSelect('name')
-            ->addFieldToFilter('level', array('in' => array(1,2)))
+            ->addFieldToFilter('level', array('in' => array(2, 3)))
             ->setOrder('level')
             ->load();
 
@@ -41,12 +41,12 @@ class Lesite_ProductAutocategory_Model_System_Config_Source_Category
     {
         $tree = array();
         foreach ($collection as $category) {
-            if ($category->getLevel() == 1) {
+            if ($category->getLevel() == 2) {
                 if (!isset($tree[$category->getId()])) {
                     $tree[$category->getId()] = array();
                 }
                 $tree[$category->getId()]['label'] = $category->getName();
-            } elseif ($category->getLevel() == 2) {
+            } elseif ($category->getLevel() == 3) {
                 if (!isset($tree[$category->getParentId()])) {
                     $tree[$category->getParentId()] = array('value' => array());
                 }

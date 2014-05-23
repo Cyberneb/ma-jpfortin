@@ -4,11 +4,12 @@ class Lesite_ProductAutocategory_Model_Resource_Product_Bestsellers
     extends Lesite_ProductAutocategory_Model_Resource_Product_Abstract
 {
     /**
-     * Get array of ids for best sellers products
+     * Get array of ids for best sellers products from specified category (and all children)
      *
+     * @param string $categoryPath
      * @return array
      */
-    public function getProductIds()
+    public function getProductIds($categoryPath = null)
     {
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select();
@@ -37,8 +38,13 @@ class Lesite_ProductAutocategory_Model_Resource_Product_Bestsellers
 
         $subselect->union(array($subselectConfig, $subselectSimple));
 
-        $select->from(array('aggr' => new Zend_Db_Expr('('.$subselect.')')))
+        $joinConditionCategory = $adapter->quoteInto('ce.entity_id=cp.category_id and ce.path like ?', $categoryPath.'%');
+
+        $select->distinct()
+            ->from(array('aggr' => new Zend_Db_Expr('('.$subselect.')')))
             ->join(array('e' => $this->getTable('catalog/product')), 'e.entity_id=aggr.product_id', null)
+            ->join(array('cp' => $this->getTable('catalog/category_product')), 'cp.product_id=e.entity_id', null)
+            ->join(array('ce' => $this->getTable('catalog/category')), $joinConditionCategory, null)
             ->order('aggr.sales DESC');
 
         $this->_applyNumberLimitation($select);

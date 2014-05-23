@@ -6,8 +6,8 @@
                 <navigation>
                     <fields>
                         <category_new translate="label" module="lesite_productautocategory">
-                            <label>"New Arrivals" category</label>
-                            <frontend_type>select</frontend_type>
+                            <label>"New Arrivals" categories</label>
+                            <frontend_type>multiselect</frontend_type>
                             <source_model>lesite_productautocategory/system_config_source_category</source_model>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
@@ -15,8 +15,8 @@
                             <show_in_store>0</show_in_store>
                         </category_new>
                         <category_sale translate="label" module="lesite_productautocategory">
-                            <label>"Sale" category</label>
-                            <frontend_type>select</frontend_type>
+                            <label>"Sale" categories</label>
+                            <frontend_type>multiselect</frontend_type>
                             <source_model>lesite_productautocategory/system_config_source_category</source_model>
                             <sort_order>110</sort_order>
                             <show_in_default>1</show_in_default>
@@ -24,8 +24,8 @@
                             <show_in_store>0</show_in_store>
                         </category_sale>
                         <category_bestsellers translate="label" module="lesite_productautocategory">
-                            <label>"Best Sellers" category</label>
-                            <frontend_type>select</frontend_type>
+                            <label>"Best Sellers" categories</label>
+                            <frontend_type>multiselect</frontend_type>
                             <source_model>lesite_productautocategory/system_config_source_category</source_model>
                             <sort_order>120</sort_order>
                             <show_in_default>1</show_in_default>
@@ -33,8 +33,8 @@
                             <show_in_store>0</show_in_store>
                         </category_bestsellers>
                         <category_web translate="label" module="lesite_productautocategory">
-                            <label>"Web Exclusives" category</label>
-                            <frontend_type>select</frontend_type>
+                            <label>"Web Exclusives" categories</label>
+                            <frontend_type>multiselect</frontend_type>
                             <source_model>lesite_productautocategory/system_config_source_category</source_model>
                             <sort_order>130</sort_order>
                             <show_in_default>1</show_in_default>

@@ -9,15 +9,16 @@ class Lesite_ProductAutocategory_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_BESTSELLERS_SALES_NUMBER = 'catalog/navigation/bestsellers_sales_number';
 
     /**
-     * Get id of category by given code
+     * Get ids of category by given type code
+     * Return comma-separated values
      *
-     * @param string $categoryCode
+     * @param string $categoryTypeCode
      * @param int|Mage_Core_Model_Store $store
-     * @return int
+     * @return string
      */
-    public function getCategoryId($categoryCode, $store = null)
+    public function getCategoryIds($categoryTypeCode, $store = null)
     {
-        return (int) Mage::getStoreConfig(self::XML_PATH_CATEGORY_PREFIX . $categoryCode, $store);
+        return Mage::getStoreConfig(self::XML_PATH_CATEGORY_PREFIX . $categoryTypeCode, $store);
     }
 
     /**
