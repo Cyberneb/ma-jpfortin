@@ -17,7 +17,7 @@ class Lesite_Erp_Model_OrderSync extends Mage_Core_Model_Abstract
         return false;
     }
 
-    public function getOrderInfo( $order_id )
+    public function getOrderInfo()
     {
         $orders = Mage::getModel('sales/order')->getCollection()
             ->addAttributeToFilter('status', array('eq' => 'pending'));
@@ -39,27 +39,24 @@ class Lesite_Erp_Model_OrderSync extends Mage_Core_Model_Abstract
         {
             $order_info = Mage::getResourceModel('lesite_erp/orderSync')
                 ->updateInfo( $order['order_id'] );
-            $order_info['INVOICE'] = '10001001';
-            if ( !empty($order_info['INVOICE']) )
+            if ( !empty($order_info['INVOICE']) && $order_info['INVOICE'] != 'N/A' )
             {
+				$order['order_id'] = $order_info['CUSTPO'];
                 $order['tracking'] = $order_info['DEL_SHIPPINGNUMBER'];
-                $order['carrier'] = $order_info['TRANSPORT'];
+                $order['carrier'] = $order_info['TRANSPORT']; //TRANSPORTTYPE
                 $shipped = $this->createShipment( $order );
-                
-            }
-            if ( $shipped )
-            {
-                $order_info = Mage::getResourceModel('lesite_erp/orderSync')
-                    ->remove( $order['order_id'] );
-                echo 'Shipped!';
+				if ( $shipped )
+				{
+					$order_info = Mage::getResourceModel('lesite_erp/orderSync')
+						->remove( $order['order_id'] );
+					echo 'Shipped!';
+				}
             }
         }
     } 
     
     public function createShipment($data)
     {
-echo 'Trying to ship';
-
         try {
             $shipment = false;
             $orderId = $data['order_id'];
@@ -69,33 +66,34 @@ echo 'Trying to ship';
 
             if (!$order->getId()) 
             {
-                return $this->__('The order no longer exists.');
+ 				return $this->__('The order no longer exists.');
             }
             
             if ($order->getForcedDoShipmentWithInvoice())
             {
-                return $this->__('Cannot do shipment for the order separately from invoice.');
+               return $this->__('Cannot do shipment for the order separately from invoice.');
             }
             if (!$order->canShip())
             {
-                return $this->__('Cannot do shipment for the order.');
+               return $this->__('Cannot do shipment for the order.');
             }
                 
-            $itemQty = $order->getItemsCollection()->count();
-            $shipment = Mage::getModel('sales/service_order', $order)->prepareShipment($itemQty);
+ 			$shipment = Mage::getModel('sales/service_order', $order)
+                            ->prepareShipment($this->_getItemQtys($order));
 
-            if ( !empty($order['tracking']) ) 
+            if ( !empty($data['tracking']) ) 
             {
-                $data = array();
-                $data['carrier_code'] = 'custom';
-                $data['title'] = $order['carrier'];
-                $data['number'] = $order['tracking'];
+                $ship_data = array();
+                $ship_data['carrier_code'] = 'custom';
+                $ship_data['title'] = $data['carrier'];
+                $ship_data['number'] = $data['tracking'];
  
-                $track = Mage::getModel('sales/order_shipment_track')->addData($data);
+                $track = Mage::getModel('sales/order_shipment_track')->addData($ship_data);
                 $shipment->addTrack($track);
             }
 
             if (!$shipment) {
+				Mage::log('Cannot ship for order '.$orderId.'.');
                 return false;
             }
 
@@ -123,10 +121,10 @@ echo 'Trying to ship';
                 }
             }
             
-            //$order->setData('state', Mage_Sales_Model_Order::STATE_COMPLETE);
-            //$order->setData('status', Mage_Sales_Model_Order::STATE_COMPLETE);
+            $order->setData('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+            $order->setData('status', Mage_Sales_Model_Order::STATE_COMPLETE);
  
-            //$order->save();
+            $order->save();
             return true;
             
         }
@@ -136,4 +134,20 @@ echo 'Trying to ship';
             return false;
         } 
     }  
+	
+	protected function _getItemQtys(Mage_Sales_Model_Order $order)
+	{
+		$qty = array();
+	 
+		foreach ($order->getAllItems() as $_eachItem) {
+			if ($_eachItem->getParentItemId()) {
+				$qty[$_eachItem->getParentItemId()] = $_eachItem->getQtyOrdered();
+			} else {
+				$qty[$_eachItem->getId()] = $_eachItem->getQtyOrdered();
+			}
+		}
+	 
+		return $qty;
+	}
+
 }

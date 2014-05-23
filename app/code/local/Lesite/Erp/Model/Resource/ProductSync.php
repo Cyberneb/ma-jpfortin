@@ -14,29 +14,77 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         return $result[0]['last_update'];
     }
     
-    public function getLastAccessed()
-    {
-        $resource = Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-        $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'SELECT sku FROM ' . $table . ' WHERE last_accessed > last_updated '
-               . 'ORDER BY last_accessed DESC LIMIT 0, 1';
-        $result = $readConnection->fetchAll($query);
-        return $result;
-    }
-   
-    public function getDailyUpdate()
-    {
-        $resource = Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-        $today = date('Y-m-d');
-        $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = "SELECT sku FROM " . $table . " WHERE last_updated IS NOT NULL "
-               . "AND last_updated < '" . $today . "' ORDER BY last_updated DESC LIMIT 0, 1";
-        $result = $readConnection->fetchAll($query);
-        return $result;
-    }
-    
+	public function getLastAccessed()
+	{
+		$resource = Mage::getSingleton('core/resource');
+		$readConnection = $resource->getConnection('core_read');
+		$table = $resource->getTableName('lesite_erp/product_sync');
+		$query = 'SELECT sku FROM ' . $table . ' WHERE last_accessed > last_updated '
+			. 'ORDER BY last_accessed DESC LIMIT 0, 1';
+		$result = $readConnection->fetchAll($query);
+		if( !empty($result['sku']) && !$this->lockAccessed($result['sku']) )
+		{
+			Mage::log('The sync is already running. Stopping the duplicate process.');
+			die();
+		}
+		return $result;
+	}
+
+	public function getDailyUpdate()
+	{
+		$resource = Mage::getSingleton('core/resource');
+		$readConnection = $resource->getConnection('core_read');
+		$today = date('Y-m-d');
+		$table = $resource->getTableName('lesite_erp/product_sync');
+		$query = "SELECT sku FROM " . $table . " WHERE last_updated IS NOT NULL "
+			. "AND last_updated < '" . $today . "' ORDER BY last_updated DESC LIMIT 0, 1";
+		$result = $readConnection->fetchAll($query);
+		if( !empty($result['sku']) && !$this->lockAccessed($result['sku']) )
+		{
+			Mage::log('The sync is already running. Stopping the duplicate process.');
+			die();
+		}
+		return $result;
+	}
+
+	public function lockAccessed( $sku )
+	{
+		$resource = Mage::getSingleton('core/resource');
+		$writeConnection = $resource->getConnection('core_write');
+		$table = $resource->getTableName('lesite_erp/product_sync');
+		$query = "UPDATE " . $table . " SET locked = 1 WHERE sku = '{$sku}' AND locked = 0";
+		try
+		{
+			$result = $writeConnection->exec($query);
+		}
+		catch ( Exception $e )
+		{
+			Mage::log('Could not lockAccessed: '.$result.$e->getMessage());
+			return false;
+		}
+		Mage::getSingleton("core/session")->setLockedSku($sku);
+		return $result;
+	}
+
+	public function unlockAccessed( $sku )
+	{
+		$resource = Mage::getSingleton('core/resource');
+		$writeConnection = $resource->getConnection('core_write');
+		$table = $resource->getTableName('lesite_erp/product_sync');
+		$query = "UPDATE " . $table . " SET locked = 0 WHERE sku = '{$sku}' AND locked = 1";
+		try
+		{
+			$result = $writeConnection->exec($query);
+		}
+		catch ( Exception $e )
+		{
+			Mage::log('Could not unlockAccessed: '.$e->getMessage());
+			return false;
+		}
+		Mage::getSingleton("core/session")->setLockedSku(0);
+		return $result;
+	}
+
     public function getNewProducts()
     {
         $smallest_sku = Mage::getSingleton("core/session")->getSmallestSku();
@@ -57,27 +105,27 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $rs = $db->Execute( $sql, array( $smallest_sku ) ); 
             if ($rs)
             {
-	         while ($row = $rs->FetchRow())
-                 {
-	             $result[] = $row;
-                     $smallest_sku = $row['SKU_SKUID'];
- 	         }
-                 Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
-            }
+				while ($row = $rs->FetchRow())
+				{
+					$result[] = $row;
+					$smallest_sku = $row['SKU_SKUID'];
+				}
+                Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
+           }
         }   
         catch (Exception $e)
         {
             Mage::log('Could not getNewProducts: sku missing');
         }
         $resource = Mage::getSingleton('core/resource');
+        $writeConnection = $resource->getConnection('core_write');
+        $table = $resource->getTableName('lesite_erp/product_sync');
         foreach( $result as $value )
         {
-            $writeConnection = $resource->getConnection('core_write');    
-            $table = $resource->getTableName('lesite_erp/product_sync');
             $query = 'INSERT IGNORE INTO ' . $table . ' ( sku ) VALUES ( :sku )';
             $binds = array( 'sku' => $value['SKU_SKUID'] );
             $writeConnection->query($query, $binds);
-        }
+		}
         return $result;
     }
     
@@ -92,6 +140,11 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $sku = @$result[0]['sku'];
         
         if ( empty($sku) ) return false;
+		if( !$this->lockAccessed($sku) )
+		{
+			Mage::log('The sync is already running. Stopping the duplicate process.');
+			die();
+		}
         $result = $this->getProductInfo( $sku );
         $this->syncProduct( $result );
         return $result;
@@ -109,7 +162,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $table = $resource->getTableName('lesite_erp/product_sync');
         $query = 'UPDATE ' . $table . ' SET configurable = :configurable, '
                . 'last_accessed = :last_accessed, '
-               . 'last_updated = :last_updated, data = :data WHERE sku = :sku';
+               . 'last_updated = :last_updated, data = :data, locked = :locked WHERE sku = :sku';
         $now = date('Y-m-d H:i:s');
         $data = serialize($info);
         $binds = array(
@@ -117,13 +170,13 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             'last_accessed' => $now,
             'last_updated' => $now,
             'data' => utf8_encode($data),
-            'sku' => $info['SKU_SKUID']
+            'locked' => 0,
+            'sku' => trim($info['SKU_SKUID'])
         );
         try {
             $result = $writeConnection->query($query, $binds);
         } catch ( Exception $e ) {
             Mage::log('Could not syncProduct: '.$e-getMessage());
-            sleep(1);
             return false;
         }
         return true;
@@ -152,10 +205,10 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
        $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'UPDATE ' . $table . ' SET last_updated = :last_updated '
+        $query = 'UPDATE ' . $table . ' SET last_updated = :last_updated, locked = :locked '
                . 'WHERE sku = :sku';
         $now = date('Y-m-d H:i:s');
-        $binds = array( 'last_updated' => $now, 'sku' => $sku );
+        $binds = array( 'last_updated' => $now, 'locked' => 0, 'sku' => $sku );
         try
         {
             $result = $writeConnection->query($query, $binds);
@@ -309,7 +362,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             Mage::log('Could not getInventoryInfo: '.$e->getMessage());
         }
         if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 3;
-	$result['sku'] = $sku; 
+		$result['sku'] = $sku; 
         return $result;
     }
     
