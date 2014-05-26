@@ -44,7 +44,11 @@
     <?php if($this->IsRssCatalogEnable() && $this->IsTopCategory()): ?>
         <a href="<?php echo $this->getRssLink() ?>" class="link-rss"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
     <?php endif; ?>
-    <h1><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+    <?php if ($_category->getCustomName()): ?>
+        <h1><?php echo $_helper->categoryAttribute($_category, $_category->getCustomName(), 'custom_name') ?></h1>
+    <?php else: ?>
+        <h1><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+    <?php endif; ?>
 </div>
 
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>

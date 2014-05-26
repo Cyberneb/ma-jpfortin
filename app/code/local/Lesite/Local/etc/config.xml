@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Lesite_Local>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Lesite_Local>
     </modules>
     <global>
@@ -25,7 +25,7 @@
             <lesite_setup>
                 <setup>
                     <module>Lesite_Local</module>
-                    <class>Mage_Core_Model_Resource_Setup</class>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
                 </setup>
             </lesite_setup>
         </resources>
