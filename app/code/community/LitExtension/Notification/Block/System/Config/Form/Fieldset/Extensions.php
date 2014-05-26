@@ -14,7 +14,7 @@ class LitExtension_Notification_Block_System_Config_Form_Fieldset_Extensions
         $info = unserialize(Mage::app()->loadCache('le_notifications_extensions'));
         $modules = array_keys((array) Mage::getConfig()->getNode('modules')->children());
         sort($modules);
-        $html .= '<link type="text/css" rel="stylesheet" media="screen" href="'.$this->getSkinUrl('le_notification/css/style.css').'"/>';
+        $html = '<link type="text/css" rel="stylesheet" media="screen" href="'.$this->getSkinUrl('le_notification/css/style.css').'"/>';
         $html .= $this->_getTitleHtml();
         foreach ($modules as $moduleName) {
             if (strstr($moduleName, 'LitExtension') === FALSE) {
