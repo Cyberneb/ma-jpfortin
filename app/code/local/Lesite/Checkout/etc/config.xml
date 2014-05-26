@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Lesite_Checkout>
+            <version>1.0.0.0</version>
+        </Lesite_Checkout>
+    </modules>
+    <frontend>
+        <routers>
+            <checkout>
+                <args>
+                    <modules>
+                        <lesite_checkout before="-">Lesite_Checkout</lesite_checkout>
+                    </modules>
+                </args>
+            </checkout>
+        </routers>
+        <layout>
+            <updates>
+                <lesite_checkout>
+                    <file>lesite_checkout.xml</file>
+                </lesite_checkout>
+            </updates>
+        </layout>
+    </frontend>
+</config>

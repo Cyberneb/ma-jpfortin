@@ -1,0 +1,11 @@
+<div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <div>
+        <a href="<?php echo $this->getContinueShoppingUrl() ?>" title="<?php echo $this->__('Continue Shopping') ?>"><?php echo $this->__('Continue Shopping') ?></a>
+            <?php echo $this->__('OR') ?>
+        <?php echo $this->getChildHtml('checkout_button') ?>
+    </div>
+</div>
+<div>
+    <?php echo $this->getChildHtml('upsell_products') ?>
+</div>
