@@ -28,23 +28,78 @@
 <?php
 $_product    = $this->getProduct();
 $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
+$_swatches = $this->getAvailableColors();
 ?>
 <?php if ($_product->isSaleable() && count($_attributes)):?>
-    <dl>
+    <div>
     <?php foreach($_attributes as $_attribute): ?>
-        <dt><label class="required"><em>*</em><?php echo $_attribute->getLabel() ?></label></dt>
-        <dd<?php if ($_attribute->decoratedIsLast){?> class="last"<?php }?>>
-            <div class="input-box">
+        <?php if ($_attribute->getProductAttribute()->getAttributeCode() == $this->getColorAttributeCode()): ?>
+            <div style="display: none;">
                 <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
                     <option><?php echo $this->__('Choose an Option...') ?></option>
-                  </select>
-              </div>
-        </dd>
+                </select>
+            </div>
+            <div class="colorset picker nav">
+                <ul>
+                    <?php foreach ($_swatches as $swatch) : ?>
+                        <li id="selectedcolor-<?php echo $swatch['id']; ?>" class="product-color-swatch<?php echo $swatch['default'] ? ' selected' : '' ?>" rel="<?php echo $swatch['id']; ?>">
+                            <a href="javascript:void(0)">
+                                <?php if ($swatch['image']): ?>
+                                <img src="<?php echo $swatch['image'] ?>" class="color-swatch" alt="<?php echo $this->escapeHtml($swatch['label'])?>"/>
+                                <?php else: ?>
+                                <div style="background-color:#<?php echo $swatch['hex_code'] ?>" class="color-swatch">&nbsp;</div>
+                                <?php endif; ?>
+                            </a>
+                            <div class="color-label">
+                                <span><?php echo $this->escapeHtml($swatch['label']) ?></span>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <script type="text/javascript">
+                var selectId = "attribute<?php echo $_attribute->getAttributeId() ?>";
+            </script>
+        <?php else: ?>
+            <div>
+                <label class="required"><em>*</em><?php echo $_attribute->getLabel() ?></label>
+                <div class="input-box">
+                    <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
+                        <option><?php echo $this->__('Choose an Option...') ?></option>
+                    </select>
+                </div>
+            </div>
+        <?php endif; ?>
     <?php endforeach; ?>
-    </dl>
+    </div>
     <script>
     jsQueue.push(function(){
         window.spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
+
+        jQuery('.product-color-swatch').click(function(){
+            $this = jQuery(this);
+            var colorId = $this.attr('rel');
+
+            updateProductMedia(colorId);
+            updateProductConfiguration(colorId);
+        });
+        window.updateProductMedia = function(colorId) {
+            jQuery('.product-image').hide();
+            jQuery('#product-image-' + colorId).show();
+            jQuery('.product-gallery').hide();
+            jQuery('#product-gallery-' + colorId).show();
+        };
+
+        window.updateProductConfiguration = function(colorId) {
+            if (typeof(selectId) === 'undefined') {
+                return;
+            }
+            jQuery('#' + selectId).val(colorId);
+            spConfig.configureElement(document.getElementById(selectId));
+        };
+
+        var colorId = jQuery('.product-color-swatch').filter('.selected').attr('rel');
+        updateProductConfiguration(colorId);
     });
     </script>
 <?php endif;?>

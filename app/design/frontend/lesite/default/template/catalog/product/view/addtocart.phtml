@@ -26,13 +26,70 @@
 ?>
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if ($_product->isComposite()): ?>
+<span id="size-guide"></span>
+<?php endif; ?>
+<span id="stock-status-label"></span>
 <?php if($_product->isSaleable()): ?>
     <div class="add-to-cart">
         <?php if(!$_product->isGrouped()): ?>
-        <label for="qty"><?php echo $this->__('Qty:') ?></label>
-        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+        <input type="hidden" name="qty" id="qty" value="<?php echo $this->getProductDefaultQty() * 1 ?>"/>
         <?php endif; ?>
-        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><?php echo $buttonTitle ?></button>
+        <button type="button" id="prodct-add-to-cart-button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><?php echo $buttonTitle ?></button>
         <?php echo $this->getChildHtml('', true, true) ?>
     </div>
 <?php endif; ?>
+
+<script>
+jsQueue.push(function(){
+    var stockStatusUpdater = {
+        init: function() {
+            jQuery('.product-color-swatch').click(this.checkStockStatus);
+            jQuery('.super-attribute-select').change(this.checkStockStatus);
+        },
+        checkStockStatus: function() {
+            var canCheckStockStatus = true;
+            jQuery('.super-attribute-select').each(function() {
+                var $option = jQuery(this);
+                if (!$option.val()) {
+                    canCheckStockStatus = false;
+                }
+            });
+            var defaultStockData = {success: true, stock: {in_stock: 0, label: ''}};
+            if (canCheckStockStatus) {
+                var postData = jQuery('#product_addtocart_form').serialize();
+                jQuery.post('<?php echo $this->getUrl('catalog/product/checkavailbility') ?>', postData).done(function(data) {
+                    stockStatusUpdater.updateStockStatus(data);
+                    stockStatusUpdater.updateAddToCartButton(data);
+                }).fail(function(data) {
+                    stockStatusUpdater.updateStockStatus(defaultStockData);
+                    stockStatusUpdater.updateAddToCartButton(defaultStockData);
+                });
+            } else {
+                stockStatusUpdater.updateStockStatus(defaultStockData);
+                stockStatusUpdater.updateAddToCartButton(defaultStockData);
+            }
+        },
+        updateStockStatus: function(stockStatus) {
+            var label = '';
+            if (stockStatus.stock && stockStatus.stock.label) {
+                label = stockStatus.stock.label;
+            }
+            jQuery('#stock-status-label').text(label);
+        },
+        updateAddToCartButton: function(stockStatus) {
+            var disabled = true;
+            if (stockStatus.stock && stockStatus.stock.in_stock) {
+                disabled = !(stockStatus.stock.in_stock*1);
+            }
+            if (disabled) {
+                jQuery('#prodct-add-to-cart-button').attr('disabled', 'disabled');
+            } else {
+                jQuery('#prodct-add-to-cart-button').removeAttr('disabled');
+            }
+        }
+    };
+    stockStatusUpdater.init();
+    stockStatusUpdater.checkStockStatus();
+});
+</script>

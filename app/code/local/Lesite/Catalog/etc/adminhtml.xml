@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <catalog>
+            <children>
+                <color translate="title" module="lesite_catalog">
+                    <title>Manage Product Colors</title>
+                    <action>adminhtml/product_color/</action>
+                    <sort_order>100</sort_order>
+                </color>
+            </children>
+         </catalog>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <product_color translate="title" module="lesite_catalog">
+                                <title>Manage Product Colors</title>
+                                <sort_order>100</sort_order>
+                                <children>
+                                    <save translate="title" module="lesite_catalog">
+                                        <title>Save Product Color</title>
+                                        <sort_order>10</sort_order>
+                                    </save>
+                                </children>
+                            </product_color>
+                        </children>
+                    </catalog>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

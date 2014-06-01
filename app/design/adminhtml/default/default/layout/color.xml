@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout>
+    <adminhtml_product_color_index>
+        <reference name="content">
+            <block type="lesite_catalog/adminhtml_product_color" name="product_color_list" />
+        </reference>
+    </adminhtml_product_color_index>
+
+    <adminhtml_product_color_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="lesite_catalog/adminhtml_product_color_grid" name="product_color_list_grid" />
+        </block>
+    </adminhtml_product_color_grid>
+
+    <adminhtml_product_color_edit>
+        <reference name="head">
+            <action method="addJs"><script>jscolor/jscolor.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="lesite_catalog/adminhtml_product_color_edit" name="product_color_edit" />
+        </reference>
+    </adminhtml_product_color_edit>
+</layout>

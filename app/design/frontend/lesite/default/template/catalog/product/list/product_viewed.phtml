@@ -1,0 +1,21 @@
+<?php if ($_products = $this->getRecentlyViewedProducts()): ?>
+<div class="block block-viewed">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('Recently Viewed') ?></span></strong>
+    </div>
+    <div class="block-content">
+        <?php foreach($_products as $_item): ?>
+            <div class="product">
+                <a href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(50) ?>" width="50" height="50" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
+                <div class="product-details">
+                    <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></p>
+                    <?php echo $this->getPriceHtml($_item, true, '-related') ?>
+                </div>
+                <div class="productListBrandTitle">
+                    <?php echo $this->escapeHtml(Mage::helper('lesite_brand/brand')->getProductBrandTitle($_item)) ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+</div>
+<?php endif; ?>

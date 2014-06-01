@@ -1,0 +1,18 @@
+<?php $_product = $this->getProduct(); ?>
+<?php $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
+
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-d890c2fa-b151-f627-a3c0-30cb8123607c", doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
+<?php if ($this->helper('wishlist')->isAllow()) : ?>
+    <a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
+<?php endif; ?>
+<style>
+/* FOR FRONTEND DEV: how to customize button image */
+.st_facebook_large .stLarge{
+    background: url("http://w.sharethis.com/images/instagram_32.png") no-repeat scroll left top transparent !important;
+}
+</style>
+<span class='st_facebook_large' displayText='Facebook'></span>
+<span class='st_pinterest_large' displayText='Pinterest'></span>
+<span class='st_twitter_large' displayText='Tweet'></span>
+<span class='st_instagram_large' displayText='Instagram Badge' st_username='<?php echo $this->getInstagramUserName() ?>'></span>

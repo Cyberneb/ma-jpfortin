@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <cataloginventory translate="label" module="cataloginventory">
+            <groups>
+                <options translate="label">
+                    <fields>
+                        <in_stock_left_qty translate="label comment" module="lesite_catalog">
+                            <label>Only X left In Stock</label>
+                            <comment><![CDATA[Display "only X items left" for those produts associated to configurable one if qty less then value of current setting. It is differ to setting "Only X left Threshold".]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </in_stock_left_qty>
+                    </fields>
+                </options>
+            </groups>
+        </cataloginventory>
+        <catalog>
+            <groups>
+                <product_share translate="label" module="lesite_catalog">
+                    <label>Product Sharing</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <instagram_username translate="label" module="lesite_catalog">
+                            <label>Instagram username</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </instagram_username>
+                    </fields>
+                </product_share>
+            </groups>
+        </catalog>
+    </sections>
+</config>

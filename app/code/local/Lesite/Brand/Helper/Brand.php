@@ -73,11 +73,11 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
                     $model->setData('url_key', $urlKey);
                 }
             }
-            
+
             $model->setStoreId($option['store_id'])
                     ->save();
-            
-            
+
+
             //update url_key
            if ($option['store_id'] == 0)
                 $model->updateUrlKey();
@@ -99,7 +99,7 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
             }
         }
     }
-    
+
     /**
      * Retrive brand Title
      *
@@ -109,10 +109,10 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
     public function getBrandTitle($brandId)
     {
         $brand = Mage::getSingleton('brand/brand')->load($brandId);
-        
+
         return $brand->getTitle();
     }
-    
+
     /**
      * Retrive Brand Description
      *
@@ -122,8 +122,43 @@ class Lesite_Brand_Helper_Brand extends Mage_Core_Helper_Abstract {
     public function getBrandDescription($brandId)
     {
         $brand = Mage::getSingleton('brand/brand')->load($brandId);
-        
+
         return $brand->getDescription();
     }
 
+    /**
+     * Retrive brand Title from given product
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string
+     */
+    public function getProductBrandTitle($product)
+    {
+        $title = '';
+        $attributeCode = $this->getAttributeCode();
+        $attribute = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
+        if ($attribute && $attribute->usesSource()) {
+            $brand = Mage::getModel('brand/brand')->load($product->getData($attributeCode));
+            $title = $brand->getTitle();
+        }
+        return $title;
+    }
+
+    /**
+     * Retrive brand Description from given product
+     *
+     * @param Mage_Catalog_Model_Product $product
+     * @return string
+     */
+    public function getProductBrandDescription($product)
+    {
+        $description = '';
+        $attributeCode = $this->getAttributeCode();
+        $attribute = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
+        if ($attribute && $attribute->usesSource()) {
+            $brand = Mage::getModel('brand/brand')->load($product->getData($attributeCode));
+            $description = $brand->getDescription();
+        }
+        return $description;
+    }
 }
