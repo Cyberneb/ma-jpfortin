@@ -84,9 +84,9 @@ $_swatches = $this->getAvailableColors();
             updateProductConfiguration(colorId);
         });
         window.updateProductMedia = function(colorId) {
-            jQuery('.product-image').hide();
+            jQuery('.product-img-box .product-image').hide();
             jQuery('#product-image-' + colorId).show();
-            jQuery('.product-gallery').hide();
+            jQuery('.product-img-box .product-gallery').hide();
             jQuery('#product-gallery-' + colorId).show();
         };
 

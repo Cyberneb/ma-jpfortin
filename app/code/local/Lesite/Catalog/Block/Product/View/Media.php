@@ -60,6 +60,7 @@ class Lesite_Catalog_Block_Product_View_Media extends Mage_Catalog_Block_Product
                 ) {
                     $colorImages[$simpleProduct->getColor()]['base'] = $simpleProduct->getImage();
                     $colorImages[$simpleProduct->getColor()]['default'] = ($simpleProduct->getColor() == $defaultColorId);
+                    $colorImages[$simpleProduct->getColor()]['thumbnails'] = array();
                     if ($simpleProductWithGallery = $simpleProductCollectionWithGallery->getItemById($simpleProduct->getId())) {
                         if ($simpleProductWithGallery->getMediaGalleryImages()) {
                             $colorImages[$simpleProduct->getColor()]['thumbnails'] = $simpleProductWithGallery->getMediaGalleryImages();

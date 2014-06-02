@@ -66,4 +66,19 @@ class Lesite_Catalog_Model_Resource_Product_Color_Collection extends Mage_Core_M
 
         return $this;
     }
+
+    /**
+     * Get SQL for get record count
+     *
+     * @return Varien_Db_Select
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(Zend_Db_Select::COLUMNS);
+        $countSelect->reset(Zend_Db_Select::GROUP);
+        $countSelect->columns('COUNT(distinct main_table.option_id)');
+
+        return $countSelect;
+    }
 }
