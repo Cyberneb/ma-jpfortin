@@ -40,10 +40,24 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 $product = Mage::getModel("catalog/product")
                     ->loadByAttribute('sku',$last_accessed[0]['sku']);
                 if ( $product ) $this->updateInventoryPosition( $product );
-
             }
             $last_accessed = Mage::getResourceModel('lesite_erp/productSync')
                 ->getLastAccessed();
+        }
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')
+            ->addNewProduct();
+        while( !empty($product_data['SKU_SKUID']) && time() < $delay )
+        { 
+            $this->saveProduct( $product_data );
+            if( Mage::getResourceModel('lesite_erp/productSync')
+                ->updateInventory($product_data['SKU_SKUID']) )
+            {
+                $product = Mage::getModel("catalog/product")
+                    ->loadByAttribute('sku',$product_data['SKU_SKUID']);
+                if ( $product ) $this->updateInventoryPosition( $product );
+            }
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')
+                ->addNewProduct();
         }
         $daily_update = Mage::getResourceModel('lesite_erp/productSync')
             ->getDailyUpdate();
@@ -67,21 +81,6 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
             }
             $daily_update = Mage::getResourceModel('lesite_erp/productSync')
                 ->getDailyUpdate();
-        }
-        $product_data = Mage::getResourceModel('lesite_erp/productSync')
-            ->getNewProducts();
-        while( !empty($product_data) && time() < $delay )
-        {
-            $product_data = Mage::getResourceModel('lesite_erp/productSync')
-                ->getNewProducts();
-        } 
-        $product_data = Mage::getResourceModel('lesite_erp/productSync')
-            ->addNewProduct();
-        while( !empty($product_data['SKU_SKUID']) && time() < $delay )
-        { 
-            $this->saveProduct( $product_data );
-            $product_data = Mage::getResourceModel('lesite_erp/productSync')
-                ->addNewProduct();
         }
         if( time() < $delay )
         {

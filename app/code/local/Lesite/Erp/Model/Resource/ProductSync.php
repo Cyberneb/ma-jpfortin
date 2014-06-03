@@ -90,7 +90,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $smallest_sku = Mage::getSingleton("core/session")->getSmallestSku();
         if ( empty($smallest_sku) )
         {
-            $smallest_sku = 0;
+            $smallest_sku = 1;
             Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
         }
         $result = array();
@@ -101,17 +101,20 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
             $sql = 'SELECT SKU_SKUID FROM ChainDrive_inventory '
-                 . 'WHERE SKU_SKUID > ? ORDER BY SKU_SKUID ASC ROWS 20'; 
-            $rs = $db->Execute( $sql, array( $smallest_sku ) ); 
+                 . 'ORDER BY SKU_SKUID ASC ROWS ? TO ?'; 
+            $params = array();
+            $params[] = $smallest_sku;
+            $params[] = $smallest_sku + 9999;
+            $rs = $db->Execute( $sql, $params ); 
             if ($rs)
             {
 				while ($row = $rs->FetchRow())
 				{
 					$result[] = $row;
-					$smallest_sku = $row['SKU_SKUID'];
 				}
-                Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
            }
+			$smallest_sku += 10000;
+            Mage::getSingleton("core/session")->setSmallestSku($smallest_sku);
         }   
         catch (Exception $e)
         {
