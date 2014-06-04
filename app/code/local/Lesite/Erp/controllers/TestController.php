@@ -31,6 +31,16 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
         }
 	}
 
+	public function getNewCustomersAction()
+	{
+        $customer_sync = Mage::getModel('lesite_erp/customerSync');
+        $allCustomersImported = $customer_sync->importCustomers();
+        while ( !$allCustomersImported )
+        {
+            $allCustomersImported = $customer_sync->importCustomers();
+        }
+	}
+
     public function reindexAction()
     {
         $codes = array(

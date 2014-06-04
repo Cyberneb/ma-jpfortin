@@ -147,13 +147,14 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
     
     public function getAttributeOptionId( $attributeCode, $newValue )
     {
-        $entityTypeID = Mage::getModel('eav/entity')->setType('catalog_product')
+       /* $entityTypeID = Mage::getModel('eav/entity')->setType('catalog_product')
             ->getTypeId();
 	$attribute = Mage::getResourceModel('eav/entity_attribute_collection')
                 ->setCodeFilter($attributeCode)
                 ->setEntityTypeFilter($entityTypeID)
-                ->getFirstItem();
-        if ($attribute == null || $attribute->getId() <= 0) return null;
+                ->getFirstItem();*/
+	$attribute = Mage::getSingleton('eav/config')->getAttibute('catalog_product',$attributeCode);
+       if ($attribute == null || $attribute->getId() <= 0) return null;
 	$attribute_id = $attribute->getId();
 	if ($newValue == '')
         {

@@ -355,8 +355,8 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             if ($rs)
             {
 	         while ($row = $rs->FetchRow())
-                 {
-	             $result['qty'] = $row['SKU_AVAILABLE']; // test
+             {
+	             $result['qty'] = $row['SKU_AVAILABLE'];
 	         }
             }
         }   
@@ -364,7 +364,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         {
             Mage::log('Could not getInventoryInfo: '.$e->getMessage());
         }
-        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 3;
+        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 3; //test
 		$result['sku'] = $sku; 
         return $result;
     }
