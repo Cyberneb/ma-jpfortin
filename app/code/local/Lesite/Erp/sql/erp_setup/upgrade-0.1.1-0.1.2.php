@@ -1,6 +1,5 @@
 ﻿<?php
 
-// changed for commit
 $installer = $this;
 
 $table = $installer->getConnection()

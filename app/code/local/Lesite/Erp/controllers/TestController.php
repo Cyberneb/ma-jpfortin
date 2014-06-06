@@ -31,7 +31,6 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
         }
 	}
 
-	// changed for commit
 	public function getNewCustomersAction()
 	{
         $customer_sync = Mage::getModel('lesite_erp/customerSync');
