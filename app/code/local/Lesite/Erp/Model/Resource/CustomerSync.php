@@ -1,5 +1,6 @@
 <?php
 
+// changed for commit
 require_once ('adodb5/adodb.inc.php');
 
 class Lesite_Erp_Model_Resource_CustomerSync  extends Mage_Catalog_Model_Resource_Abstract
