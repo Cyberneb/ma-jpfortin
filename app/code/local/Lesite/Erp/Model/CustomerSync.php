@@ -18,6 +18,7 @@ class Lesite_Erp_Model_CustomerSync extends Mage_Core_Model_Abstract
         return false;
     }*/
     
+	//changed for commit
     public function importCustomers()
     {
 		Mage::getSingleton("core/session")->setFromRow(0);
