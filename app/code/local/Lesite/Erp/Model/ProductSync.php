@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
 {
@@ -45,6 +45,29 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
             $last_accessed = Mage::getResourceModel('lesite_erp/productSync')
                 ->getLastAccessed();
         }
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')
+            ->addNewProduct();
+        while( !empty($product_data['SKU_SKUID']) && time() < $delay )
+        { 
+            $this->saveProduct( $product_data );
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')
+                ->addNewProduct();
+        }
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')
+            ->getNewProducts();
+        while( !empty($product_data) && time() < $delay )
+        {
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')
+                ->getNewProducts();
+        } 
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')
+            ->addNewProduct();
+        while( !empty($product_data['SKU_SKUID']) && time() < $delay )
+        { 
+            $this->saveProduct( $product_data );
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')
+                ->addNewProduct();
+        }
         $daily_update = Mage::getResourceModel('lesite_erp/productSync')
             ->getDailyUpdate();
         while( !empty($daily_update) && time() < $delay  )
@@ -67,21 +90,6 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
             }
             $daily_update = Mage::getResourceModel('lesite_erp/productSync')
                 ->getDailyUpdate();
-        }
-        $product_data = Mage::getResourceModel('lesite_erp/productSync')
-            ->getNewProducts();
-        while( !empty($product_data) && time() < $delay )
-        {
-            $product_data = Mage::getResourceModel('lesite_erp/productSync')
-                ->getNewProducts();
-        } 
-        $product_data = Mage::getResourceModel('lesite_erp/productSync')
-            ->addNewProduct();
-        while( !empty($product_data['SKU_SKUID']) && time() < $delay )
-        { 
-            $this->saveProduct( $product_data );
-            $product_data = Mage::getResourceModel('lesite_erp/productSync')
-                ->addNewProduct();
         }
         if( time() < $delay )
         {
@@ -112,7 +120,7 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         if (empty($parentId))
         {
             $root_id = Mage::app()->getStore()->getRootCategoryId();
-			$rootPath = '1/'.$root_id;
+ 			$rootPath = '1/'.$root_id;
             $parentCategory = Mage::getModel('catalog/category');
             $parentCategory->setName($category);
             $parentCategory->setIsActive(1);
@@ -142,18 +150,18 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
             $childCategory->setAttributeSetId($childCategory->getDefaultAttributeSetId());
             $childCategory->save();
        }
-        return array( $parentId, $categoryId );
-    }
-    
+       return array( $parentId, $categoryId );
+    }    
     
     public function getAttributeOptionId( $attributeCode, $newValue )
     {
-        $entityTypeID = Mage::getModel('eav/entity')->setType('catalog_product')
+        /* $entityTypeID = Mage::getModel('eav/entity')->setType('catalog_product')
             ->getTypeId();
 	$attribute = Mage::getResourceModel('eav/entity_attribute_collection')
                 ->setCodeFilter($attributeCode)
                 ->setEntityTypeFilter($entityTypeID)
-                ->getFirstItem();
+                ->getFirstItem();*/
+	$attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product',$attributeCode);
         if ($attribute == null || $attribute->getId() <= 0) return null;
 	$attribute_id = $attribute->getId();
 	if ($newValue == '')
@@ -185,10 +193,13 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
 	    $attribute->save();
 	}
         //reset the attribute
-        $attribute = Mage::getResourceModel('eav/entity_attribute_collection')
+        /* $entityTypeID = Mage::getModel('eav/entity')->setType('catalog_product')
+            ->getTypeId();
+	$attribute = Mage::getResourceModel('eav/entity_attribute_collection')
                 ->setCodeFilter($attributeCode)
                 ->setEntityTypeFilter($entityTypeID)
-                ->getFirstItem();
+                ->getFirstItem();*/
+	$attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product',$attributeCode);
  	return $attribute->getSource()->getOptionId($newValue);
     }
     
@@ -196,13 +207,13 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
     {
         Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
         $store_id = '0';
-        $category = $product_data['INV_PCLASS_DESC2'];
-        $sub_category = $product_data['INV_PSCLASS_DESC2'];
+        $category = utf8_encode($product_data['INV_PCLASS_DESC2']);
+        $sub_category = utf8_encode($product_data['INV_PSCLASS_DESC2']);
         $categoryId = $this->getCategoryId( $store_id, $category, $sub_category );
 
-        switch( $product_data['INV_PSCLASS_DESC2'] )
+        switch( $product_data['INV_DEPT_DESC1'] )
         {
-            case 'HOMMES' :
+            case 'Hommes' :
                 $gender = 'man';
                 break;
             Default :
@@ -229,7 +240,7 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 ->setTaxClassId($taxId)
                 ->setCreatedAt(strtotime('now'))
                 ->setName($product_data['INV_DESC_2'])
-                ->setGender($gender)
+                //->setGender($gender)
                 ->setSku($product_data['SKU_SKUID'])
                 ->setWeight($product_data['INV_WEIGHT'])
                 ->setStatus($web_enabled)
@@ -316,16 +327,16 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 ->load($configurableProduct,null)
                 ->saveProducts( $configurableProduct, $productIds );
 
-            $stock_item = Mage::getModel('cataloginventory/stock_item')
+            $stockItem = Mage::getModel('cataloginventory/stock_item')
                 ->loadByProduct( $configurableProduct->getId() );
-            if (!$stock_item->getId())
+            if (!$stockItem->getId())
             {
-                $stock_item->setData( 'product_id', $configurableProduct->getId() );
-                $stock_item->setData( 'stock_id', 1 ); 
+                $stockItem->setData( 'product_id', $configurableProduct->getId() );
+                $stockItem->setData( 'stock_id', 1 ); 
             }
-            $stock_item->setData( 'is_in_stock', 1 ); 
-            $stock_item->setData( 'manage_stock', 1 );
-            $stock_item->save();
+            $stockItem->setData( 'is_in_stock', 1 ); 
+            $stockItem->setData( 'manage_stock', 1 );
+            $stockItem->save();
         }
         catch(Exception $e)
         {
@@ -333,23 +344,23 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         }
     }
 
-    protected function updateInventoryPosition( $product )
+    protected function updateInventoryPosition( $product, $storeId=0 )
     {
         $result = Mage::getResourceModel('lesite_erp/productSync')
-            ->getInventoryInfo($product->getSku());
-        $qty = $result['qty'];
+            ->getSyncInventoryInfo($product->getSku());
+        $qty = ''.$result['qty'];
         $is_in_stock = $qty ? '1' : '0';
-        $stock_item = Mage::getModel('cataloginventory/stock_item')
-                ->loadByProduct( $product->getId() );
-        if (!$stock_item->getId())
-        {
-            $stock_item->setData( 'product_id', $product->getId() );
-            $stock_item->setData( 'stock_id', 1 ); 
-        }
-        $stock_item->setData( 'qty', $qty ); 
-        $stock_item->setData( 'use_config_manage_stock', 0 ); 
-        $stock_item->setData( 'is_in_stock', $is_in_stock ); 
-        $stock_item->setData( 'manage_stock', 1 );
-        $stock_item->save();
+        if (!($stockItem = $product->getStockItem()))
+		{
+			$stockItem = Mage::getModel('cataloginventory/stock_item');
+			$stockItem->assignProduct($product)
+              ->setData('stock_id', 1)
+              ->setData('store_id', $storeId);
+		}
+        $stockItem->setData( 'qty', $qty )
+			->setData( 'use_config_manage_stock', 0 )
+			->setData( 'is_in_stock', $is_in_stock )
+			->setData( 'manage_stock', 1 );
+		$stockItem->save();
     }
 }

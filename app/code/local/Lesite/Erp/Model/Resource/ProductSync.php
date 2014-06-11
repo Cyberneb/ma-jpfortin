@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require_once ('adodb5/adodb.inc.php');
 
@@ -24,7 +24,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
 		$result = $readConnection->fetchAll($query);
 		if( !empty($result['sku']) && !$this->lockAccessed($result['sku']) )
 		{
-			Mage::log('The sync is already running. Stopping the duplicate process.');
+			//Mage::log('The sync is already running. Stopping the duplicate process.');
 			die();
 		}
 		return $result;
@@ -41,7 +41,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
 		$result = $readConnection->fetchAll($query);
 		if( !empty($result['sku']) && !$this->lockAccessed($result['sku']) )
 		{
-			Mage::log('The sync is already running. Stopping the duplicate process.');
+			//Mage::log('The sync is already running. Stopping the duplicate process.');
 			die();
 		}
 		return $result;
@@ -100,9 +100,9 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
-            $sql = 'SELECT SKU_SKUID FROM ChainDrive_inventory '
-                 . 'WHERE SKU_SKUID > ? ORDER BY SKU_SKUID ASC ROWS 20'; 
-            $rs = $db->Execute( $sql, array( $smallest_sku ) ); 
+            $sql = "SELECT SKU_SKUID FROM ChainDrive_Inventory_by_Store "
+                 . "WHERE SKU_BRANCHID = ? AND SKU_SKUID > ? AND SKU_AVAILABLE > 0 ORDER BY SKU_SKUID ASC ROWS 1000"; 
+            $rs = $db->Execute( $sql, array( '00', $smallest_sku ) ); 
             if ($rs)
             {
 				while ($row = $rs->FetchRow())
@@ -142,7 +142,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         if ( empty($sku) ) return false;
 		if( !$this->lockAccessed($sku) )
 		{
-			Mage::log('The sync is already running. Stopping the duplicate process.');
+			//Mage::log('The sync is already running. Stopping the duplicate process.');
 			die();
 		}
         $result = $this->getProductInfo( $sku );
@@ -205,10 +205,10 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
        $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/product_sync');
-        $query = 'UPDATE ' . $table . ' SET last_updated = :last_updated, locked = :locked '
+        $query = 'UPDATE ' . $table . ' SET last_accessed = :last_accessed, last_updated = :last_updated, locked = :locked '
                . 'WHERE sku = :sku';
         $now = date('Y-m-d H:i:s');
-        $binds = array( 'last_updated' => $now, 'locked' => 0, 'sku' => $sku );
+        $binds = array( 'last_accessed' => $now, 'last_updated' => $now, 'locked' => 0, 'sku' => $sku );
         try
         {
             $result = $writeConnection->query($query, $binds);
@@ -222,11 +222,12 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         $resource = Mage::getSingleton('core/resource');
         $writeConnection = $resource->getConnection('core_write');    
         $table = $resource->getTableName('lesite_erp/inventory_sync');
-        $query = 'REPLACE INTO ' . $table . ' ( sku, last_updated, '
-               . 'qty ) VALUES ( :sku, :last_updated, :qty )';
+        $query = 'REPLACE INTO ' . $table . ' ( sku, last_accessed, last_updated, '
+               . 'qty ) VALUES ( :sku, :last_accessed, :last_updated, :qty )';
         $now = date('Y-m-d H:i:s');
         $binds = array(
             'sku' => $info['sku'],
+			'last_accessed' => $now,
             'last_updated' => $now,
             'qty' => $info['qty']            
         );
@@ -351,17 +352,17 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $rs = $db->Execute($sql,$params); 
             if ($rs)
             {
-	         while ($row = $rs->FetchRow())
-                 {
-	             $result['qty'] = $row['SKU_AVAILABLE']; // test
-	         }
-            }
+				while ($row = $rs->FetchRow())
+				{
+					$result['qty'] = $row['SKU_AVAILABLE'];
+				}
+			}
         }   
         catch (Exception $e)
         {
             Mage::log('Could not getInventoryInfo: '.$e->getMessage());
         }
-        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 3;
+        if ( empty($result['qty']) || $result['qty'] < 0 ) $result['qty'] = 0;
 		$result['sku'] = $sku; 
         return $result;
     }

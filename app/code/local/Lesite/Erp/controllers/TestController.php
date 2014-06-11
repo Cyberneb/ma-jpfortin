@@ -19,7 +19,28 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
             $allProductsUpdated = $product_sync->updateAll();
         }
     }
-    
+
+	public function getNewProductsAction()
+	{
+        $product_data = Mage::getResourceModel('lesite_erp/productSync')
+            ->getNewProducts();
+        while( !empty($product_data) )
+        {
+            $product_data = Mage::getResourceModel('lesite_erp/productSync')
+                ->getNewProducts();
+        }
+	}
+
+	public function getNewCustomersAction()
+	{
+        $customer_sync = Mage::getModel('lesite_erp/customerSync');
+        $allCustomersImported = $customer_sync->importCustomers();
+        while ( !$allCustomersImported )
+        {
+            $allCustomersImported = $customer_sync->importCustomers();
+        }
+	}
+
     public function reindexAction()
     {
         $codes = array(
