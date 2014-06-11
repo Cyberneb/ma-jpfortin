@@ -34,12 +34,23 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
 	public function getNewCustomersAction()
 	{
         $customer_sync = Mage::getModel('lesite_erp/customerSync');
+        if( $customer_sync->alreadyRunning() )
+        {
+			return false;
+        }
         $allCustomersImported = $customer_sync->importCustomers();
         while ( !$allCustomersImported )
         {
             $allCustomersImported = $customer_sync->importCustomers();
         }
 	}
+
+	public function getCustIdAction()
+	{
+        $customer_sync = Mage::getModel('lesite_erp/customerSync');
+		$email = '2mj@videotron.ca';
+        echo 'CustID = ' . $customer_sync->getCustId( $email );
+ 	}
 
     public function reindexAction()
     {

@@ -4,6 +4,16 @@ require_once ('adodb5/adodb.inc.php');
 
 class Lesite_Erp_Model_Resource_CustomerSync  extends Mage_Catalog_Model_Resource_Abstract
 {
+    public function getLastUpdateTime()
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $table = $resource->getTableName('lesite_erp/customer_sync');
+        $query = 'SELECT MAX( last_updated ) AS last_update FROM ' . $table;
+        $result = $readConnection->fetchAll($query);
+        return $result[0]['last_update'];
+    }
+
 	public function getNewCustomers()
 	{
 		$fromRow = Mage::getSingleton("core/session")->getFromRow();

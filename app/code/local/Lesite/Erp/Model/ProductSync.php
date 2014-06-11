@@ -224,7 +224,7 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         {
             $visibility = 4;
         }
-        $size = $this->getAttributeOptionId( 'size', $product_data['SKU_DIM1'] );
+        $size = ''.$this->getAttributeOptionId( 'size', $product_data['SKU_DIM1'] );
         $taxId = ( $product_data['INV_PCLASS_TAXCLASS'] == 'TX' ) ? 2 : 0;
         $web_enabled = ( $product_data['INV_ISWEBPRODUCT'] == 'Y' ) ? 1 : 0;
         // [INV_BMKS] => M
@@ -344,23 +344,23 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
         }
     }
 
-    protected function updateInventoryPosition( $product, $storeId=0 )
+    protected function updateInventoryPosition( $product )
     {
         $result = Mage::getResourceModel('lesite_erp/productSync')
             ->getSyncInventoryInfo($product->getSku());
-        $qty = ''.$result['qty'];
+        $qty = $result['qty'];
         $is_in_stock = $qty ? '1' : '0';
-        if (!($stockItem = $product->getStockItem()))
-		{
-			$stockItem = Mage::getModel('cataloginventory/stock_item');
-			$stockItem->assignProduct($product)
-              ->setData('stock_id', 1)
-              ->setData('store_id', $storeId);
-		}
-        $stockItem->setData( 'qty', $qty )
-			->setData( 'use_config_manage_stock', 0 )
-			->setData( 'is_in_stock', $is_in_stock )
-			->setData( 'manage_stock', 1 );
-		$stockItem->save();
+        $stock_item = Mage::getModel('cataloginventory/stock_item')
+                ->loadByProduct( $product->getId() );
+        if (!$stock_item->getId())
+        {
+            $stock_item->setData( 'product_id', $product->getId() );
+            $stock_item->setData( 'stock_id', 1 ); 
+        }
+        $stock_item->setData( 'qty', $qty ); 
+        $stock_item->setData( 'use_config_manage_stock', 0 ); 
+        $stock_item->setData( 'is_in_stock', $is_in_stock ); 
+        $stock_item->setData( 'manage_stock', 1 );
+        $stock_item->save();
     }
 }

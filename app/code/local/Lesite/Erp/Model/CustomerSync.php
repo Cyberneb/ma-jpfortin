@@ -7,7 +7,7 @@ class Lesite_Erp_Model_CustomerSync extends Mage_Core_Model_Abstract
         $this->_init('lesite_erp/customer_sync');
     }
     
-    /*public function alreadyRunning()
+    public function alreadyRunning()
     {
         $last_update = Mage::getResourceModel('lesite_erp/customerSync')
             ->getLastUpdateTime();
@@ -16,7 +16,7 @@ class Lesite_Erp_Model_CustomerSync extends Mage_Core_Model_Abstract
             return true;
         }
         return false;
-    }*/
+    }
     
     public function importCustomers()
     {
@@ -96,30 +96,27 @@ class Lesite_Erp_Model_CustomerSync extends Mage_Core_Model_Abstract
 			Mage::log('Could not save customer address: '.$e->getMessage());
 		}
 		Mage::getSingleton('checkout/session')->getQuote()->setBillingAddress(Mage::getSingleton('sales/quote_address')->importCustomerAddress($customAddress));
-/*
-$customerAddress = Mage::getModel('customer/address');
+	}
 
-if ($defaultShippingId = $customer->getDefaultShipping()){
-     $customerAddress->load($defaultShippingId); 
-} else {   
-     $customerAddress
-        ->setCustomerId($customer->getId())
-        ->setIsDefaultShipping('1')
-        ->setSaveInAddressBook('1')
-     ;   
-
-     $customer->addAddress($customerAddress);
-}            
-
-try {
-    $customerAddress
-        ->addData($dataShipping)
-        ->save()
-    ;           
-} catch(Exception $e){
-    Mage::log('Address Save Error::' . $e->getMessage());
-}
-*/	}
+	public function getCustId( $email )
+	{
+		$customer_data = Mage::getResourceModel('lesite_erp/customerSync')->getSyncCustomerInfo( $email );
+		if ( !empty($customer_data['data']['CUSTID']) )
+		{
+			$cust_id = $customer_data['data']['CUSTID'];
+			return $cust_id;
+		}
+		else
+		{
+			$customer_data = Mage::getResourceModel('lesite_erp/customerSync')->getCustomerInfo( $email );
+			if ( !empty($customer_data['CUSTID']) )
+			{
+				$cust_id = $customer_data['CUSTID'];
+				return $cust_id;
+			}
+		}
+		return null;
+	}
 
 	protected function random_password( $length = 8 ) 
 	{

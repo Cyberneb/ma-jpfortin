@@ -6,8 +6,8 @@ class Lesite_Erp_Model_Resource_OrderSync  extends Mage_Catalog_Model_Resource_A
 {
     public function exportOrder( $order )
     {
-        $orderId = '100000021';
-		//$orderId = $order->getIncrementID();
+		$customer_sync = Mage::getModel('lesite_erp/customerSync');
+		$orderId = $order->getIncrementID();
         $billingAddress = $order->getBillingAddress();
         $address = $billingAddress->getStreet();
         $billingAddress1 = $address[0];
@@ -26,7 +26,7 @@ class Lesite_Erp_Model_Resource_OrderSync  extends Mage_Catalog_Model_Resource_A
                        . "ORDER_CREATED_AT, IMPORT_STATUS, ORDER_NOTES, IPADDRESS, "
                        . "ORDER_PRODUCT_COST, ORDER_SHIPPING_COST, ORDER_SHIPPING_TYPE_ID, "
 					   . "ORDERTYPE, LOCATION_TYPE, REFERRER, BRANCHID, ORDER_TAX_COST, "
-                       . "ORDER_TAX_COST2, DISCOUNT, CUSTID, FIRST_NAME, LAST_NAME, "
+                       . "ORDER_TAX_COST2, DISCOUNT, CUSTID, GENERICID, FIRST_NAME, LAST_NAME, "
                        . "TELEPHONE, ADDRESS1, ADDRESS2, CITY, STATE, ZIP, COUNTRY_ID, "
                        . "EMAIL, S_FIRST_NAME, S_LAST_NAME, S_TELEPHONE, S_ADDRESS1, "
                        . "S_ADDRESS2, S_CITY, S_STATE, S_ZIP, S_COUNTRY_ID ) VALUES( "
@@ -50,6 +50,7 @@ class Lesite_Erp_Model_Resource_OrderSync  extends Mage_Catalog_Model_Resource_A
             $params[] = $order->getTaxAmount();
             $params[] = $order->getTaxAmount(); // tax amount 2 ?
             $params[] = $order->getDiscountAmount();
+            $params[] = $customer_sync->getCustId( $order->getCustomerEmail() );
             $params[] = $order->getCustomerID();
             $params[] = $order->getCustomerFirstname();
             $params[] = $order->getCustomerLastname();

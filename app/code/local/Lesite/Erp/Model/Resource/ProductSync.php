@@ -100,9 +100,9 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             //$conn->debug = true;
             $db->Connect('70.25.42.201','WEBADM','WEBADM','C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
-            $sql = "SELECT SKU_SKUID FROM ChainDrive_Inventory_by_Store "
-                 . "WHERE SKU_BRANCHID = ? AND SKU_SKUID > ? AND SKU_AVAILABLE > 0 ORDER BY SKU_SKUID ASC ROWS 1000"; 
-            $rs = $db->Execute( $sql, array( '00', $smallest_sku ) ); 
+            $sql = "SELECT DISTINCT SKU_SKUID FROM ChainDrive_Inventory_by_Store "
+                 . "WHERE SKU_AVAILABLE > 0 AND SKU_SKUID > ? ORDER BY SKU_SKUID ASC ROWS 1000"; 
+            $rs = $db->Execute( $sql, array( $smallest_sku ) );
             if ($rs)
             {
 				while ($row = $rs->FetchRow())
@@ -342,11 +342,10 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             $db->Connect('70.25.42.201','WEBADM','WEBADM',
                 'C:\multidev\GdbCreation\Web Lab\SV1020_012HO.GBB');
             $db->SetFetchMode(ADODB_FETCH_ASSOC);
-            $statement = "SELECT * FROM ChainDrive_Inventory_by_Store "
-                       . "WHERE SKU_BRANCHID = ? AND SKU_SKUID = ?";
+            $statement = "SELECT SKU_SKUID, SUM(SKU_AVAILABLE) AS QTY FROM ChainDrive_Inventory_by_Store "
+                       . "WHERE SKU_SKUID = ? GROUP BY SKU_SKUID";
             $result = array();
             $params = array();
-            $params[] = '00'; //WE';
             $params[] = $sku;
             $sql = $db->Prepare($statement);
             $rs = $db->Execute($sql,$params); 
@@ -354,7 +353,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
             {
 				while ($row = $rs->FetchRow())
 				{
-					$result['qty'] = $row['SKU_AVAILABLE'];
+					$result['qty'] = $row['QTY'];
 				}
 			}
         }   
