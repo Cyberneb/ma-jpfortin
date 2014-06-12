@@ -7,6 +7,7 @@ class Lesite_Erp_TestController extends Mage_Core_Controller_Front_Action
 {
     public function indexAction()
     {
+		//$this->reindexAction();
         $product_sync = Mage::getModel('lesite_erp/productSync');
         if( $product_sync->alreadyRunning() )
         {
