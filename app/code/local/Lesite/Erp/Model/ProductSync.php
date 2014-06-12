@@ -254,6 +254,18 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 ->setShortDescription($product_data['INV_DESC_2'])
                 ->setsetupCost($product_data['INV_COST']);
             $simpleProduct->save();
+			$store_id = 2; //jj_fr
+            $simpleProduct->setName($product_data['INV_DESC_1'])
+                ->setStoreId($store_id)
+                ->setDescription($product_data['INV_DESC_1'])
+                ->setShortDescription($product_data['INV_DESC_1']);
+            $simpleProduct->save();
+			$store_id = 4; //lpst_fr
+            $simpleProduct->setName($product_data['INV_DESC_1'])
+                ->setStoreId($store_id)
+                ->setDescription($product_data['INV_DESC_1'])
+                ->setShortDescription($product_data['INV_DESC_1']);
+            $simpleProduct->save();
             if( Mage::getResourceModel('lesite_erp/productSync')
                 ->updateInventory($product_data['SKU_SKUID']) )
             {
@@ -277,6 +289,7 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 ->setCreatedAt(strtotime('now'))
                 ->setName($product_data['INV_DESC_2'])
                 //->setGender($gender)
+                ->setData( 'super_product', $product_data['INV_DEFSUPPPRODID'] )
                 ->setSku($product_data['INV_PRODUCTCODE'])
                 ->setWeight($product_data['INV_WEIGHT'])
                 ->setStatus($web_enabled)
@@ -288,6 +301,18 @@ class Lesite_Erp_Model_ProductSync extends Mage_Core_Model_Abstract
                 ->setDescription($product_data['INV_DESC_2'])
                 ->setShortDescription($product_data['INV_DESC_2'])
                 ->setsetupCost($product_data['INV_COST']);
+            $configurableProduct->save();
+			$store_id = 2; //jj_fr
+            $configurableProduct->setName($product_data['INV_DESC_1'])
+                ->setStoreId($store_id)
+                ->setDescription($product_data['INV_DESC_1'])
+                ->setShortDescription($product_data['INV_DESC_1']);
+            $configurableProduct->save();
+			$store_id = 4; //lpst_fr
+            $configurableProduct->setName($product_data['INV_DESC_1'])
+                ->setStoreId($store_id)
+                ->setDescription($product_data['INV_DESC_1'])
+                ->setShortDescription($product_data['INV_DESC_1']);
             $configurableProduct->save();
            //foreach($configAttrCodes as $attrCode)
             //{

@@ -146,6 +146,11 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
 			die();
 		}
         $result = $this->getProductInfo( $sku );
+		if ( !empty($sku) && empty($result) )
+		{
+			$this->removeProductToSync();
+			$this->addNewProduct();
+		}
         $this->syncProduct( $result );
         return $result;
     }
@@ -154,8 +159,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
     {
         if ( empty($info['SKU_SKUID']) )
         {
-            Mage::log('Could not syncProduct: sku missing');
-			$this->removeProductToSync();
+            //Mage::log('Could not syncProduct: sku missing');
             return false;
         }
         $resource = Mage::getSingleton('core/resource');
