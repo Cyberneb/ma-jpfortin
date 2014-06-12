@@ -155,6 +155,7 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         if ( empty($info['SKU_SKUID']) )
         {
             Mage::log('Could not syncProduct: sku missing');
+			$this->removeProductToSync();
             return false;
         }
         $resource = Mage::getSingleton('core/resource');
@@ -384,4 +385,21 @@ class Lesite_Erp_Model_Resource_ProductSync  extends Mage_Catalog_Model_Resource
         }
         return count($result);
     }
+
+	protected function removeProductToSync()
+	{
+		$resource = Mage::getSingleton('core/resource');
+		$writeConnection = $resource->getConnection('core_write');    
+		$table = $resource->getTableName('lesite_erp/product_sync');
+		$query = 'DELETE FROM ' . $table . ' WHERE locked = 1';
+		try
+		{
+			$result = $writeConnection->query($query);
+		}
+		catch ( Exception $e )
+		{
+			Mage::log('Could not removeProductToSync: '.$e-getMessage());
+		}
+	}
+
 }
